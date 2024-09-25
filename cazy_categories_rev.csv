@@ -1,0 +1,48 @@
+Cazy_Function,Category,Renamed_function
+CAZy..Alpha.galactans,CAZy,Alpha galactans
+CAZy..Alpha.mannan,CAZy, Alpha-mannan
+CAZy..Amorphous.Cellulose,CAZy, Amorphous Cellulose
+CAZy..Arabinan,CAZy, Arabinan
+CAZy..Arabinose.cleavage,CAZy, Arabinose cleavage
+CAZy..Beta.galactan..pectic.galactan.,CAZy,Beta galactan pectin galactan
+CAZy..Beta.mannan,CAZy, Beta-mannan
+CAZy..Chitin,CAZy, Chitin
+CAZy..Crystalline.Cellulose,CAZy,Crystalline cellulose
+CAZy..Fucose.Cleavage,CAZy, Fucose Cleavage
+CAZy..Mixed.Linkage.glucans,CAZy, Mixed-Linkage glucans
+CAZy..Mucin,CAZy,Mucin
+CAZy..Pectin,CAZy, Pectin
+CAZy..Polyphenolics,CAZy, Polyphenolics
+CAZy..Rhamnose.cleavage,CAZy, Rhamnose cleavage
+CAZy..Starch,CAZy, Starch
+CAZy..Sulf.Polysachharides,CAZy, Sulf-Polysachharides
+CAZy..Xylans,CAZy, Xylans
+CAZy..Xyloglucan,CAZy, Xyloglucan
+Methanogenesis.and.methanotrophy..acetate....methane..pt.1,Methanogenesis and methanotrophy," acetate => methane, pt 1"
+Methanogenesis.and.methanotrophy..acetate....methane..pt.2,Methanogenesis and methanotrophy," acetate => methane, pt 2"
+Methanogenesis.and.methanotrophy..acetate....methane..pt.3,Methanogenesis and methanotrophy," acetate => methane, pt 3"
+Methanogenesis.and.methanotrophy..methane....methanol..with.oxygen..pmo.,Nitrogen metabolism,methane methanol with oxygen pmo.
+Methanogenesis.and.methanotrophy..putative.but.not.defining.CO2....methane,Nitrogen metabolism, putative but not defining CO2 => methane
+Methanogenesis.and.methanotrophy..trimethylamine....dimethylamine,Nitrogen metabolism,Trimethylamine dimethylamine
+Nitrogen.metabolism..Bacterial.Archaeal.ammonia.oxidation,Nitrogen metabolism,Bact Arch ammonia oxidation
+Nitrogen.metabolism..nitrate....nitrite,Nitrogen metabolism, nitrate => nitrite
+Nitrogen.metabolism..nitric.oxide....nitrous.oxide,Nitrogen metabolism, nitric oxide => nitrous oxide
+Nitrogen.metabolism..nitrite....nitrate,Nitrogen metabolism,nitrite => nitrate
+Nitrogen.metabolism..nitrite....nitric.oxide,Nitrogen metabolism, nitrite => nitric oxide
+Nitrogen.metabolism..nitrogen....ammonia,Nitrogen metabolism,nitrogen => ammonia
+Nitrogen.metabolism..nitrous.oxide....nitrogen,Nitrogen metabolism, nitrous oxide => nitrogen
+Other.Reductases..arsenate.reduction..pt.1,Other Reductases," arsenate reduction, pt 1"
+Other.Reductases..mercury.reduction,Other Reductases,mercury reduction
+Photosynthesis..Photosystem.I,Photosynthesis,Photosystem-I
+Photosynthesis..Photosystem.II,Photosynthesis,Photosystem-II
+SCFA.and.alcohol.conversions..Alcohol.production,SCFA and alcohol conversions, Alcohol production
+SCFA.and.alcohol.conversions..Propionate..pt.2,SCFA and alcohol conversions,"Propionate, pt2"
+SCFA.and.alcohol.conversions..acetate..pt.1,SCFA and alcohol conversions," acetate, pt 1"
+SCFA.and.alcohol.conversions..acetate..pt.2,SCFA and alcohol conversions," acetate, pt 2"
+SCFA.and.alcohol.conversions..lactate.D,SCFA and alcohol conversions, lactate D
+SCFA.and.alcohol.conversions..lactate.L,SCFA and alcohol conversions, lactate L
+SCFA.and.alcohol.conversions..pyruvate....acetyl.CoA.v1,SCFA and alcohol conversions, pyruvate => acetyl CoA v1
+SCFA.and.alcohol.conversions..pyruvate....acetyl.CoA.v2,SCFA and alcohol conversions, pyruvate => acetyl CoA v2
+SCFA.and.alcohol.conversions..pyruvate....acetylCoA.f..formate.v3,SCFA and alcohol conversions, pyruvate => acetyl CoA v3
+Sulfur.metabolism..Thiosulfate.oxidation.by.SOX.complex..thiosulfate....sulfate,Sulfur metabolism," Thiosulfate oxidation by SOX complex, thiosulfate => sulfate"
+Sulfur.metabolism..tetrathionate....thiosulfate,Sulfur metabolism,Tetrathionate thiosulfate

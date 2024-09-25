@@ -1,0 +1,523 @@
+﻿Phylum,Function,Category,n,Completeness
+Acidobacteriota,ArsC,Alternative e acceptor,0,
+Acidobacteriota,RdhA,Alternative e acceptor,0,
+Acidobacteriota,Cyc2,Alternative e donor,0,
+Acidobacteriota,FdhA,Alternative e donor,0,
+Acidobacteriota,HbsT,Carbon fixation,0,
+Acidobacteriota,RbcL,Carbon fixation,0,
+Acidobacteriota,AmoA,Nitrogen cycle,0,
+Acidobacteriota,NapA,Nitrogen cycle,0,
+Acidobacteriota,NarG,Nitrogen cycle,0,
+Acidobacteriota,NifH,Nitrogen cycle,0,
+Acidobacteriota,NirK,Nitrogen cycle,0,
+Acidobacteriota,NorB,Nitrogen cycle,0,
+Acidobacteriota,NosZ,Nitrogen cycle,0,
+Acidobacteriota,PsaA,Phototrophy,0,
+Acidobacteriota,PsbA,Phototrophy,0,
+Acidobacteriota,RHO,Phototrophy,0,
+Acidobacteriota,AtpA,Respiration,4,73.8075
+Acidobacteriota,CcoN,Respiration,0,
+Acidobacteriota,CoxA,Respiration,4,68.115
+Acidobacteriota,CydA,Respiration,0,
+Acidobacteriota,CyoA,Respiration,0,
+Acidobacteriota,NuoF,Respiration,0,
+Acidobacteriota,Sdha_FrdA,Respiration,5,77.612
+Acidobacteriota,DsrA,Sulfur cycle,0,
+Acidobacteriota,FCC,Sulfur cycle,0,
+Acidobacteriota,SoxB,Sulfur cycle,0,
+Acidobacteriota,Sqr,Sulfur cycle,0,
+Acidobacteriota,CoxL,Trace gas metabolism,0,
+Acidobacteriota,NiFe_hydrogenase,Trace gas metabolism,0,
+Actinobacteriota,ArsC,Alternative e acceptor,31,83.43483871
+Actinobacteriota,RdhA,Alternative e acceptor,10,95.968
+Actinobacteriota,Cyc2,Alternative e donor,0,
+Actinobacteriota,FdhA,Alternative e donor,0,
+Actinobacteriota,HbsT,Carbon fixation,0,
+Actinobacteriota,RbcL,Carbon fixation,0,
+Actinobacteriota,AmoA,Nitrogen cycle,0,
+Actinobacteriota,NapA,Nitrogen cycle,0,
+Actinobacteriota,NarG,Nitrogen cycle,3,74.12666667
+Actinobacteriota,NifH,Nitrogen cycle,0,
+Actinobacteriota,NirK,Nitrogen cycle,2,66.52
+Actinobacteriota,NorB,Nitrogen cycle,1,82.88
+Actinobacteriota,NosZ,Nitrogen cycle,0,
+Actinobacteriota,PsaA,Phototrophy,0,
+Actinobacteriota,PsbA,Phototrophy,0,
+Actinobacteriota,RHO,Phototrophy,31,89.31548387
+Actinobacteriota,AtpA,Respiration,58,87.94206897
+Actinobacteriota,CcoN,Respiration,0,
+Actinobacteriota,CoxA,Respiration,57,87.61263158
+Actinobacteriota,CydA,Respiration,2,86.11
+Actinobacteriota,CyoA,Respiration,0,
+Actinobacteriota,NuoF,Respiration,59,86.76762712
+Actinobacteriota,Sdha_FrdA,Respiration,63,86.26095238
+Actinobacteriota,DsrA,Sulfur cycle,0,
+Actinobacteriota,FCC,Sulfur cycle,0,
+Actinobacteriota,SoxB,Sulfur cycle,0,
+Actinobacteriota,Sqr,Sulfur cycle,1,89.34
+Actinobacteriota,CoxL,Trace gas metabolism,3,84.85
+Actinobacteriota,NiFe_hydrogenase,Trace gas metabolism,0,
+Bacteroidota,ArsC,Alternative e acceptor,54,78.98648148
+Bacteroidota,RdhA,Alternative e acceptor,0,
+Bacteroidota,Cyc2,Alternative e donor,0,
+Bacteroidota,FdhA,Alternative e donor,6,88.98
+Bacteroidota,HbsT,Carbon fixation,0,
+Bacteroidota,RbcL,Carbon fixation,1,61.38
+Bacteroidota,AmoA,Nitrogen cycle,0,
+Bacteroidota,NapA,Nitrogen cycle,0,
+Bacteroidota,NarG,Nitrogen cycle,0,
+Bacteroidota,NifH,Nitrogen cycle,0,
+Bacteroidota,NirK,Nitrogen cycle,0,
+Bacteroidota,NorB,Nitrogen cycle,0,
+Bacteroidota,NosZ,Nitrogen cycle,0,
+Bacteroidota,PsaA,Phototrophy,0,
+Bacteroidota,PsbA,Phototrophy,1,84.38
+Bacteroidota,RHO,Phototrophy,91,80.93945055
+Bacteroidota,AtpA,Respiration,104,79.33576923
+Bacteroidota,CcoN,Respiration,0,
+Bacteroidota,CoxA,Respiration,89,80.47820225
+Bacteroidota,CydA,Respiration,0,
+Bacteroidota,CyoA,Respiration,0,
+Bacteroidota,NuoF,Respiration,1,90.75
+Bacteroidota,Sdha_FrdA,Respiration,106,78.56207547
+Bacteroidota,DsrA,Sulfur cycle,0,
+Bacteroidota,FCC,Sulfur cycle,0,
+Bacteroidota,SoxB,Sulfur cycle,1,65.43
+Bacteroidota,Sqr,Sulfur cycle,0,
+Bacteroidota,CoxL,Trace gas metabolism,0,
+Bacteroidota,NiFe_hydrogenase,Trace gas metabolism,0,
+Binatota,ArsC,Alternative e acceptor,0,
+Binatota,RdhA,Alternative e acceptor,0,
+Binatota,Cyc2,Alternative e donor,0,
+Binatota,FdhA,Alternative e donor,0,
+Binatota,HbsT,Carbon fixation,0,
+Binatota,RbcL,Carbon fixation,0,
+Binatota,AmoA,Nitrogen cycle,0,
+Binatota,NapA,Nitrogen cycle,0,
+Binatota,NarG,Nitrogen cycle,0,
+Binatota,NifH,Nitrogen cycle,0,
+Binatota,NirK,Nitrogen cycle,0,
+Binatota,NorB,Nitrogen cycle,0,
+Binatota,NosZ,Nitrogen cycle,0,
+Binatota,PsaA,Phototrophy,0,
+Binatota,PsbA,Phototrophy,0,
+Binatota,RHO,Phototrophy,1,93.14
+Binatota,AtpA,Respiration,1,93.14
+Binatota,CcoN,Respiration,0,
+Binatota,CoxA,Respiration,1,93.14
+Binatota,CydA,Respiration,0,
+Binatota,CyoA,Respiration,0,
+Binatota,NuoF,Respiration,0,
+Binatota,Sdha_FrdA,Respiration,1,93.14
+Binatota,DsrA,Sulfur cycle,0,
+Binatota,FCC,Sulfur cycle,0,
+Binatota,SoxB,Sulfur cycle,0,
+Binatota,Sqr,Sulfur cycle,0,
+Binatota,CoxL,Trace gas metabolism,0,
+Binatota,NiFe_hydrogenase,Trace gas metabolism,0,
+Chloroflexota,ArsC,Alternative e acceptor,0,
+Chloroflexota,RdhA,Alternative e acceptor,0,
+Chloroflexota,Cyc2,Alternative e donor,0,
+Chloroflexota,FdhA,Alternative e donor,5,75.53
+Chloroflexota,HbsT,Carbon fixation,0,
+Chloroflexota,RbcL,Carbon fixation,0,
+Chloroflexota,AmoA,Nitrogen cycle,0,
+Chloroflexota,NapA,Nitrogen cycle,0,
+Chloroflexota,NarG,Nitrogen cycle,0,
+Chloroflexota,NifH,Nitrogen cycle,0,
+Chloroflexota,NirK,Nitrogen cycle,0,
+Chloroflexota,NorB,Nitrogen cycle,0,
+Chloroflexota,NosZ,Nitrogen cycle,0,
+Chloroflexota,PsaA,Phototrophy,0,
+Chloroflexota,PsbA,Phototrophy,0,
+Chloroflexota,RHO,Phototrophy,0,
+Chloroflexota,AtpA,Respiration,20,74.8305
+Chloroflexota,CcoN,Respiration,0,
+Chloroflexota,CoxA,Respiration,21,71.09809524
+Chloroflexota,CydA,Respiration,0,
+Chloroflexota,CyoA,Respiration,0,
+Chloroflexota,NuoF,Respiration,0,
+Chloroflexota,Sdha_FrdA,Respiration,24,74.07708333
+Chloroflexota,DsrA,Sulfur cycle,0,
+Chloroflexota,FCC,Sulfur cycle,0,
+Chloroflexota,SoxB,Sulfur cycle,0,
+Chloroflexota,Sqr,Sulfur cycle,0,
+Chloroflexota,CoxL,Trace gas metabolism,1,71.54
+Chloroflexota,NiFe_hydrogenase,Trace gas metabolism,0,
+Crenarchaeota,ArsC,Alternative e acceptor,14,80.03571429
+Crenarchaeota,RdhA,Alternative e acceptor,0,
+Crenarchaeota,Cyc2,Alternative e donor,0,
+Crenarchaeota,FdhA,Alternative e donor,0,
+Crenarchaeota,HbsT,Carbon fixation,15,77.818
+Crenarchaeota,RbcL,Carbon fixation,0,
+Crenarchaeota,AmoA,Nitrogen cycle,20,71.976
+Crenarchaeota,NapA,Nitrogen cycle,0,
+Crenarchaeota,NarG,Nitrogen cycle,0,
+Crenarchaeota,NifH,Nitrogen cycle,0,
+Crenarchaeota,NirK,Nitrogen cycle,0,
+Crenarchaeota,NorB,Nitrogen cycle,0,
+Crenarchaeota,NosZ,Nitrogen cycle,0,
+Crenarchaeota,PsaA,Phototrophy,0,
+Crenarchaeota,PsbA,Phototrophy,0,
+Crenarchaeota,RHO,Phototrophy,0,
+Crenarchaeota,AtpA,Respiration,3,59.47666667
+Crenarchaeota,CcoN,Respiration,0,
+Crenarchaeota,CoxA,Respiration,0,
+Crenarchaeota,CydA,Respiration,0,
+Crenarchaeota,CyoA,Respiration,0,
+Crenarchaeota,NuoF,Respiration,0,
+Crenarchaeota,Sdha_FrdA,Respiration,19,74.07210526
+Crenarchaeota,DsrA,Sulfur cycle,0,
+Crenarchaeota,FCC,Sulfur cycle,0,
+Crenarchaeota,SoxB,Sulfur cycle,0,
+Crenarchaeota,Sqr,Sulfur cycle,0,
+Crenarchaeota,CoxL,Trace gas metabolism,0,
+Crenarchaeota,NiFe_hydrogenase,Trace gas metabolism,0,
+Cyanobacteria,ArsC,Alternative e acceptor,2,62.74
+Cyanobacteria,RdhA,Alternative e acceptor,0,
+Cyanobacteria,Cyc2,Alternative e donor,0,
+Cyanobacteria,FdhA,Alternative e donor,0,
+Cyanobacteria,HbsT,Carbon fixation,0,
+Cyanobacteria,RbcL,Carbon fixation,17,87.15588235
+Cyanobacteria,AmoA,Nitrogen cycle,0,
+Cyanobacteria,NapA,Nitrogen cycle,0,
+Cyanobacteria,NarG,Nitrogen cycle,0,
+Cyanobacteria,NifH,Nitrogen cycle,0,
+Cyanobacteria,NirK,Nitrogen cycle,0,
+Cyanobacteria,NorB,Nitrogen cycle,0,
+Cyanobacteria,NosZ,Nitrogen cycle,0,
+Cyanobacteria,PsaA,Phototrophy,36,82.00444444
+Cyanobacteria,PsbA,Phototrophy,1,69.29
+Cyanobacteria,RHO,Phototrophy,0,
+Cyanobacteria,AtpA,Respiration,37,81.84162162
+Cyanobacteria,CcoN,Respiration,0,
+Cyanobacteria,CoxA,Respiration,27,84.22962963
+Cyanobacteria,CydA,Respiration,0,
+Cyanobacteria,CyoA,Respiration,0,
+Cyanobacteria,NuoF,Respiration,0,
+Cyanobacteria,Sdha_FrdA,Respiration,8,75.26875
+Cyanobacteria,DsrA,Sulfur cycle,0,
+Cyanobacteria,FCC,Sulfur cycle,0,
+Cyanobacteria,SoxB,Sulfur cycle,0,
+Cyanobacteria,Sqr,Sulfur cycle,0,
+Cyanobacteria,CoxL,Trace gas metabolism,0,
+Cyanobacteria,NiFe_hydrogenase,Trace gas metabolism,0,
+Dadabacteria,ArsC,Alternative e acceptor,0,
+Dadabacteria,RdhA,Alternative e acceptor,0,
+Dadabacteria,Cyc2,Alternative e donor,0,
+Dadabacteria,FdhA,Alternative e donor,0,
+Dadabacteria,HbsT,Carbon fixation,0,
+Dadabacteria,RbcL,Carbon fixation,0,
+Dadabacteria,AmoA,Nitrogen cycle,0,
+Dadabacteria,NapA,Nitrogen cycle,0,
+Dadabacteria,NarG,Nitrogen cycle,0,
+Dadabacteria,NifH,Nitrogen cycle,0,
+Dadabacteria,NirK,Nitrogen cycle,0,
+Dadabacteria,NorB,Nitrogen cycle,0,
+Dadabacteria,NosZ,Nitrogen cycle,0,
+Dadabacteria,PsaA,Phototrophy,0,
+Dadabacteria,PsbA,Phototrophy,0,
+Dadabacteria,RHO,Phototrophy,0,
+Dadabacteria,AtpA,Respiration,1,76.4
+Dadabacteria,CcoN,Respiration,0,
+Dadabacteria,CoxA,Respiration,1,76.4
+Dadabacteria,CydA,Respiration,0,
+Dadabacteria,CyoA,Respiration,0,
+Dadabacteria,NuoF,Respiration,0,
+Dadabacteria,Sdha_FrdA,Respiration,1,76.4
+Dadabacteria,DsrA,Sulfur cycle,0,
+Dadabacteria,FCC,Sulfur cycle,0,
+Dadabacteria,SoxB,Sulfur cycle,0,
+Dadabacteria,Sqr,Sulfur cycle,0,
+Dadabacteria,CoxL,Trace gas metabolism,0,
+Dadabacteria,NiFe_hydrogenase,Trace gas metabolism,0,
+Fibrobacterota,ArsC,Alternative e acceptor,1,70.69
+Fibrobacterota,RdhA,Alternative e acceptor,0,
+Fibrobacterota,Cyc2,Alternative e donor,0,
+Fibrobacterota,FdhA,Alternative e donor,0,
+Fibrobacterota,HbsT,Carbon fixation,0,
+Fibrobacterota,RbcL,Carbon fixation,0,
+Fibrobacterota,AmoA,Nitrogen cycle,0,
+Fibrobacterota,NapA,Nitrogen cycle,0,
+Fibrobacterota,NarG,Nitrogen cycle,0,
+Fibrobacterota,NifH,Nitrogen cycle,0,
+Fibrobacterota,NirK,Nitrogen cycle,0,
+Fibrobacterota,NorB,Nitrogen cycle,0,
+Fibrobacterota,NosZ,Nitrogen cycle,0,
+Fibrobacterota,PsaA,Phototrophy,0,
+Fibrobacterota,PsbA,Phototrophy,0,
+Fibrobacterota,RHO,Phototrophy,0,
+Fibrobacterota,AtpA,Respiration,1,70.69
+Fibrobacterota,CcoN,Respiration,0,
+Fibrobacterota,CoxA,Respiration,1,70.69
+Fibrobacterota,CydA,Respiration,0,
+Fibrobacterota,CyoA,Respiration,0,
+Fibrobacterota,NuoF,Respiration,0,
+Fibrobacterota,Sdha_FrdA,Respiration,1,70.69
+Fibrobacterota,DsrA,Sulfur cycle,0,
+Fibrobacterota,FCC,Sulfur cycle,0,
+Fibrobacterota,SoxB,Sulfur cycle,0,
+Fibrobacterota,Sqr,Sulfur cycle,0,
+Fibrobacterota,CoxL,Trace gas metabolism,0,
+Fibrobacterota,NiFe_hydrogenase,Trace gas metabolism,0,
+Gemmatimonadota,ArsC,Alternative e acceptor,0,
+Gemmatimonadota,RdhA,Alternative e acceptor,0,
+Gemmatimonadota,Cyc2,Alternative e donor,0,
+Gemmatimonadota,FdhA,Alternative e donor,0,
+Gemmatimonadota,HbsT,Carbon fixation,0,
+Gemmatimonadota,RbcL,Carbon fixation,0,
+Gemmatimonadota,AmoA,Nitrogen cycle,0,
+Gemmatimonadota,NapA,Nitrogen cycle,0,
+Gemmatimonadota,NarG,Nitrogen cycle,0,
+Gemmatimonadota,NifH,Nitrogen cycle,0,
+Gemmatimonadota,NirK,Nitrogen cycle,0,
+Gemmatimonadota,NorB,Nitrogen cycle,0,
+Gemmatimonadota,NosZ,Nitrogen cycle,0,
+Gemmatimonadota,PsaA,Phototrophy,0,
+Gemmatimonadota,PsbA,Phototrophy,0,
+Gemmatimonadota,RHO,Phototrophy,0,
+Gemmatimonadota,AtpA,Respiration,7,79.85714286
+Gemmatimonadota,CcoN,Respiration,0,
+Gemmatimonadota,CoxA,Respiration,8,83.10375
+Gemmatimonadota,CydA,Respiration,4,85.1075
+Gemmatimonadota,CyoA,Respiration,0,
+Gemmatimonadota,NuoF,Respiration,0,
+Gemmatimonadota,Sdha_FrdA,Respiration,9,78.83333333
+Gemmatimonadota,DsrA,Sulfur cycle,0,
+Gemmatimonadota,FCC,Sulfur cycle,0,
+Gemmatimonadota,SoxB,Sulfur cycle,0,
+Gemmatimonadota,Sqr,Sulfur cycle,0,
+Gemmatimonadota,CoxL,Trace gas metabolism,0,
+Gemmatimonadota,NiFe_hydrogenase,Trace gas metabolism,0,
+Marinisomatota,ArsC,Alternative e acceptor,0,
+Marinisomatota,RdhA,Alternative e acceptor,0,
+Marinisomatota,Cyc2,Alternative e donor,0,
+Marinisomatota,FdhA,Alternative e donor,0,
+Marinisomatota,HbsT,Carbon fixation,0,
+Marinisomatota,RbcL,Carbon fixation,0,
+Marinisomatota,AmoA,Nitrogen cycle,0,
+Marinisomatota,NapA,Nitrogen cycle,0,
+Marinisomatota,NarG,Nitrogen cycle,0,
+Marinisomatota,NifH,Nitrogen cycle,0,
+Marinisomatota,NirK,Nitrogen cycle,0,
+Marinisomatota,NorB,Nitrogen cycle,0,
+Marinisomatota,NosZ,Nitrogen cycle,0,
+Marinisomatota,PsaA,Phototrophy,0,
+Marinisomatota,PsbA,Phototrophy,0,
+Marinisomatota,RHO,Phototrophy,0,
+Marinisomatota,AtpA,Respiration,1,63.24
+Marinisomatota,CcoN,Respiration,0,
+Marinisomatota,CoxA,Respiration,0,
+Marinisomatota,CydA,Respiration,0,
+Marinisomatota,CyoA,Respiration,0,
+Marinisomatota,NuoF,Respiration,0,
+Marinisomatota,Sdha_FrdA,Respiration,0,
+Marinisomatota,DsrA,Sulfur cycle,0,
+Marinisomatota,FCC,Sulfur cycle,0,
+Marinisomatota,SoxB,Sulfur cycle,0,
+Marinisomatota,Sqr,Sulfur cycle,0,
+Marinisomatota,CoxL,Trace gas metabolism,0,
+Marinisomatota,NiFe_hydrogenase,Trace gas metabolism,0,
+Myxococcota,ArsC,Alternative e acceptor,1,62.75
+Myxococcota,RdhA,Alternative e acceptor,0,
+Myxococcota,Cyc2,Alternative e donor,0,
+Myxococcota,FdhA,Alternative e donor,0,
+Myxococcota,HbsT,Carbon fixation,0,
+Myxococcota,RbcL,Carbon fixation,0,
+Myxococcota,AmoA,Nitrogen cycle,0,
+Myxococcota,NapA,Nitrogen cycle,0,
+Myxococcota,NarG,Nitrogen cycle,0,
+Myxococcota,NifH,Nitrogen cycle,0,
+Myxococcota,NirK,Nitrogen cycle,0,
+Myxococcota,NorB,Nitrogen cycle,0,
+Myxococcota,NosZ,Nitrogen cycle,0,
+Myxococcota,PsaA,Phototrophy,0,
+Myxococcota,PsbA,Phototrophy,0,
+Myxococcota,RHO,Phototrophy,1,57.76
+Myxococcota,AtpA,Respiration,2,58.7
+Myxococcota,CcoN,Respiration,0,
+Myxococcota,CoxA,Respiration,1,59.64
+Myxococcota,CydA,Respiration,0,
+Myxococcota,CyoA,Respiration,0,
+Myxococcota,NuoF,Respiration,0,
+Myxococcota,Sdha_FrdA,Respiration,1,59.64
+Myxococcota,DsrA,Sulfur cycle,0,
+Myxococcota,FCC,Sulfur cycle,0,
+Myxococcota,SoxB,Sulfur cycle,0,
+Myxococcota,Sqr,Sulfur cycle,0,
+Myxococcota,CoxL,Trace gas metabolism,0,
+Myxococcota,NiFe_hydrogenase,Trace gas metabolism,0,
+Nitrospinota,ArsC,Alternative e acceptor,4,83.5725
+Nitrospinota,RdhA,Alternative e acceptor,0,
+Nitrospinota,Cyc2,Alternative e donor,0,
+Nitrospinota,FdhA,Alternative e donor,0,
+Nitrospinota,HbsT,Carbon fixation,0,
+Nitrospinota,RbcL,Carbon fixation,0,
+Nitrospinota,AmoA,Nitrogen cycle,0,
+Nitrospinota,NapA,Nitrogen cycle,0,
+Nitrospinota,NarG,Nitrogen cycle,0,
+Nitrospinota,NifH,Nitrogen cycle,0,
+Nitrospinota,NirK,Nitrogen cycle,0,
+Nitrospinota,NorB,Nitrogen cycle,0,
+Nitrospinota,NosZ,Nitrogen cycle,0,
+Nitrospinota,PsaA,Phototrophy,0,
+Nitrospinota,PsbA,Phototrophy,0,
+Nitrospinota,RHO,Phototrophy,0,
+Nitrospinota,AtpA,Respiration,6,74.90166667
+Nitrospinota,CcoN,Respiration,0,
+Nitrospinota,CoxA,Respiration,2,57.56
+Nitrospinota,CydA,Respiration,0,
+Nitrospinota,CyoA,Respiration,0,
+Nitrospinota,NuoF,Respiration,6,74.90166667
+Nitrospinota,Sdha_FrdA,Respiration,5,76.926
+Nitrospinota,DsrA,Sulfur cycle,0,
+Nitrospinota,FCC,Sulfur cycle,0,
+Nitrospinota,SoxB,Sulfur cycle,0,
+Nitrospinota,Sqr,Sulfur cycle,0,
+Nitrospinota,CoxL,Trace gas metabolism,0,
+Nitrospinota,NiFe_hydrogenase,Trace gas metabolism,0,
+Planctomycetota,ArsC,Alternative e acceptor,8,84.7575
+Planctomycetota,RdhA,Alternative e acceptor,0,
+Planctomycetota,Cyc2,Alternative e donor,0,
+Planctomycetota,FdhA,Alternative e donor,5,84.424
+Planctomycetota,HbsT,Carbon fixation,0,
+Planctomycetota,RbcL,Carbon fixation,0,
+Planctomycetota,AmoA,Nitrogen cycle,0,
+Planctomycetota,NapA,Nitrogen cycle,0,
+Planctomycetota,NarG,Nitrogen cycle,0,
+Planctomycetota,NifH,Nitrogen cycle,0,
+Planctomycetota,NirK,Nitrogen cycle,0,
+Planctomycetota,NorB,Nitrogen cycle,0,
+Planctomycetota,NosZ,Nitrogen cycle,0,
+Planctomycetota,PsaA,Phototrophy,0,
+Planctomycetota,PsbA,Phototrophy,0,
+Planctomycetota,RHO,Phototrophy,4,84.8825
+Planctomycetota,AtpA,Respiration,16,77.609375
+Planctomycetota,CcoN,Respiration,1,50.11
+Planctomycetota,CoxA,Respiration,18,79.825
+Planctomycetota,CydA,Respiration,0,
+Planctomycetota,CyoA,Respiration,0,
+Planctomycetota,NuoF,Respiration,1,74.5
+Planctomycetota,Sdha_FrdA,Respiration,14,81.20928571
+Planctomycetota,DsrA,Sulfur cycle,0,
+Planctomycetota,FCC,Sulfur cycle,0,
+Planctomycetota,SoxB,Sulfur cycle,0,
+Planctomycetota,Sqr,Sulfur cycle,0,
+Planctomycetota,CoxL,Trace gas metabolism,0,
+Planctomycetota,NiFe_hydrogenase,Trace gas metabolism,0,
+Proteobacteria,ArsC,Alternative e acceptor,222,76.96400901
+Proteobacteria,RdhA,Alternative e acceptor,48,80.52395833
+Proteobacteria,Cyc2,Alternative e donor,1,76.71
+Proteobacteria,FdhA,Alternative e donor,218,80.07986239
+Proteobacteria,HbsT,Carbon fixation,0,
+Proteobacteria,RbcL,Carbon fixation,12,72.39083333
+Proteobacteria,AmoA,Nitrogen cycle,0,
+Proteobacteria,NapA,Nitrogen cycle,1,76.71
+Proteobacteria,NarG,Nitrogen cycle,3,90.77
+Proteobacteria,NifH,Nitrogen cycle,1,76.71
+Proteobacteria,NirK,Nitrogen cycle,5,73.776
+Proteobacteria,NorB,Nitrogen cycle,1,87.45
+Proteobacteria,NosZ,Nitrogen cycle,1,88.31
+Proteobacteria,PsaA,Phototrophy,2,75.91
+Proteobacteria,PsbA,Phototrophy,71,81.59746479
+Proteobacteria,RHO,Phototrophy,171,74.36099415
+Proteobacteria,AtpA,Respiration,304,79.18944079
+Proteobacteria,CcoN,Respiration,12,84.68166667
+Proteobacteria,CoxA,Respiration,305,77.24593443
+Proteobacteria,CydA,Respiration,8,82.8425
+Proteobacteria,CyoA,Respiration,6,83.165
+Proteobacteria,NuoF,Respiration,266,78.63101504
+Proteobacteria,Sdha_FrdA,Respiration,331,77.36882175
+Proteobacteria,DsrA,Sulfur cycle,37,80.40135135
+Proteobacteria,FCC,Sulfur cycle,79,79.97670886
+Proteobacteria,SoxB,Sulfur cycle,127,81.10677165
+Proteobacteria,Sqr,Sulfur cycle,75,82.0416
+Proteobacteria,CoxL,Trace gas metabolism,49,82.95102041
+Proteobacteria,NiFe_hydrogenase,Trace gas metabolism,6,81.91833333
+SAR324,ArsC,Alternative e acceptor,9,83.15555556
+SAR324,RdhA,Alternative e acceptor,0,
+SAR324,Cyc2,Alternative e donor,0,
+SAR324,FdhA,Alternative e donor,10,74.913
+SAR324,HbsT,Carbon fixation,0,
+SAR324,RbcL,Carbon fixation,5,75.468
+SAR324,AmoA,Nitrogen cycle,0,
+SAR324,NapA,Nitrogen cycle,0,
+SAR324,NarG,Nitrogen cycle,0,
+SAR324,NifH,Nitrogen cycle,0,
+SAR324,NirK,Nitrogen cycle,0,
+SAR324,NorB,Nitrogen cycle,0,
+SAR324,NosZ,Nitrogen cycle,0,
+SAR324,PsaA,Phototrophy,0,
+SAR324,PsbA,Phototrophy,0,
+SAR324,RHO,Phototrophy,1,90.58
+SAR324,AtpA,Respiration,9,76.21777778
+SAR324,CcoN,Respiration,3,85.4
+SAR324,CoxA,Respiration,7,74.09714286
+SAR324,CydA,Respiration,0,
+SAR324,CyoA,Respiration,0,
+SAR324,NuoF,Respiration,0,
+SAR324,Sdha_FrdA,Respiration,8,76.3225
+SAR324,DsrA,Sulfur cycle,3,71.67333333
+SAR324,FCC,Sulfur cycle,1,90.58
+SAR324,SoxB,Sulfur cycle,0,
+SAR324,Sqr,Sulfur cycle,0,
+SAR324,CoxL,Trace gas metabolism,9,72.22222222
+SAR324,NiFe_hydrogenase,Trace gas metabolism,0,
+Thermoplasmatota,ArsC,Alternative e acceptor,0,
+Thermoplasmatota,RdhA,Alternative e acceptor,0,
+Thermoplasmatota,Cyc2,Alternative e donor,0,
+Thermoplasmatota,FdhA,Alternative e donor,1,65.67
+Thermoplasmatota,HbsT,Carbon fixation,0,
+Thermoplasmatota,RbcL,Carbon fixation,0,
+Thermoplasmatota,AmoA,Nitrogen cycle,1,80.84
+Thermoplasmatota,NapA,Nitrogen cycle,0,
+Thermoplasmatota,NarG,Nitrogen cycle,0,
+Thermoplasmatota,NifH,Nitrogen cycle,0,
+Thermoplasmatota,NirK,Nitrogen cycle,0,
+Thermoplasmatota,NorB,Nitrogen cycle,0,
+Thermoplasmatota,NosZ,Nitrogen cycle,0,
+Thermoplasmatota,PsaA,Phototrophy,0,
+Thermoplasmatota,PsbA,Phototrophy,0,
+Thermoplasmatota,RHO,Phototrophy,77,75.68649351
+Thermoplasmatota,AtpA,Respiration,108,73.22861111
+Thermoplasmatota,CcoN,Respiration,0,
+Thermoplasmatota,CoxA,Respiration,7,70.70428571
+Thermoplasmatota,CydA,Respiration,0,
+Thermoplasmatota,CyoA,Respiration,0,
+Thermoplasmatota,NuoF,Respiration,0,
+Thermoplasmatota,Sdha_FrdA,Respiration,112,73.64928571
+Thermoplasmatota,DsrA,Sulfur cycle,0,
+Thermoplasmatota,FCC,Sulfur cycle,0,
+Thermoplasmatota,SoxB,Sulfur cycle,0,
+Thermoplasmatota,Sqr,Sulfur cycle,0,
+Thermoplasmatota,CoxL,Trace gas metabolism,0,
+Thermoplasmatota,NiFe_hydrogenase,Trace gas metabolism,0,
+Verrucomicrobiota,ArsC,Alternative e acceptor,38,83.59342105
+Verrucomicrobiota,RdhA,Alternative e acceptor,0,
+Verrucomicrobiota,Cyc2,Alternative e donor,0,
+Verrucomicrobiota,FdhA,Alternative e donor,7,90.01428571
+Verrucomicrobiota,HbsT,Carbon fixation,0,
+Verrucomicrobiota,RbcL,Carbon fixation,0,
+Verrucomicrobiota,AmoA,Nitrogen cycle,0,
+Verrucomicrobiota,NapA,Nitrogen cycle,0,
+Verrucomicrobiota,NarG,Nitrogen cycle,0,
+Verrucomicrobiota,NifH,Nitrogen cycle,0,
+Verrucomicrobiota,NirK,Nitrogen cycle,0,
+Verrucomicrobiota,NorB,Nitrogen cycle,0,
+Verrucomicrobiota,NosZ,Nitrogen cycle,0,
+Verrucomicrobiota,PsaA,Phototrophy,0,
+Verrucomicrobiota,PsbA,Phototrophy,0,
+Verrucomicrobiota,RHO,Phototrophy,29,89.51827586
+Verrucomicrobiota,AtpA,Respiration,69,83.81014493
+Verrucomicrobiota,CcoN,Respiration,7,82.01571429
+Verrucomicrobiota,CoxA,Respiration,18,90.09388889
+Verrucomicrobiota,CydA,Respiration,0,
+Verrucomicrobiota,CyoA,Respiration,0,
+Verrucomicrobiota,NuoF,Respiration,76,86.06210526
+Verrucomicrobiota,Sdha_FrdA,Respiration,75,86.64093333
+Verrucomicrobiota,DsrA,Sulfur cycle,0,
+Verrucomicrobiota,FCC,Sulfur cycle,0,
+Verrucomicrobiota,SoxB,Sulfur cycle,0,
+Verrucomicrobiota,Sqr,Sulfur cycle,0,
+Verrucomicrobiota,CoxL,Trace gas metabolism,0,
+Verrucomicrobiota,NiFe_hydrogenase,Trace gas metabolism,0,
