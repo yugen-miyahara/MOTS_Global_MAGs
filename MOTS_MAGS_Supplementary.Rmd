@@ -1,0 +1,2182 @@
+---
+title: "MOTS MAG Summary Plots"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r LOAD ALL THIS FIRST, warning=FALSE, message=FALSE}
+library("magrittr")
+library("ggplot2")
+library("forcats")
+library("dplyr")
+library("phyloseq")
+library("ggpubr")
+library("tidyr")
+library("Rmisc")
+library("microViz")
+library("readxl")
+library("tidyverse")
+library("conflicted")
+library("ggExtra")
+library("cowplot")
+library("gridExtra")
+library("ggforce")
+library("vegan")
+library('rstatix')
+library("ggpmisc")
+library("data.table")
+library("tibble")
+library("grid")
+
+My_Theme = theme(axis.title.x = element_text(face="bold",size=24),
+                 axis.text.x = element_text(colour = "black", size=22), 
+                 axis.text.y = element_text(colour = "black", size=22),
+                 axis.title.y = element_text(face="bold",size=24),
+                 plot.title = element_text(size = 24),
+                 legend.title =element_text(face="bold",size = 14),
+                 legend.text = element_text(size = 14),
+                 legend.key.size = unit(1, "cm"),
+                 strip.text.x = element_text(size=22, face="bold"),
+                 strip.text.y = element_text(size=22, face="bold"),
+                 panel.border = element_rect(fill = NA, colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank())
+
+library(microViz)
+brewerPlus <- distinct_palette()
+
+
+library(viridis)
+library(ggExtra)
+
+#mots_phyloseq
+#OTU table
+mots.otu.csv <- read.csv(file="~/base data/mots_otu.csv", header = TRUE, na.strings = "unclassified", fileEncoding="UTF-8-BOM", check.names = FALSE, row.names = 1)
+mots.otu.matrix <- as.matrix(mots.otu.csv)
+
+mots.otu <- otu_table(mots.otu.matrix, taxa_are_rows = TRUE)
+
+
+#Taxa table
+mots.taxa.csv <- read.csv(file="~/base data/taxa_table.csv", header = TRUE, na.strings = "unclassified", fileEncoding="UTF-8-BOM", check.names = FALSE, row.names = 1)
+
+
+
+# #####
+# #To allow all ranks to be shown I recoded the taxa_table file. This is how it was done. 
+# #update taxonomy
+# temp_meta_file <- read.csv(file="/Volumes/micro-shared$/MoralesLab/Projects/MOTS/MOTS_MAGs/bin_taxonomy.csv", header = TRUE, na.strings = "unclassified", fileEncoding="UTF-8-BOM", check.names = FALSE, row.names = 1)
+# 
+# library(stringr)
+# #split 'player' column using '_' as the separator
+# temp_meta_file[c('Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species')] <- str_split_fixed(temp_meta_file$Classification, ';', 7)
+# 
+# temp_meta_file[, c(2:8)] <- as.data.frame(apply(temp_meta_file[,c(c(2:8))], 2,
+#                                          function(temp_meta_file) {
+#                                            gsub(".__", "", temp_meta_file)}
+# ))
+# 
+# temp_meta_file<-temp_meta_file[ -c(1) ]
+# 
+# #remove taxonomy columns
+# mots.taxa.csv <- mots.taxa.csv[ -c(1:5) ]
+# 
+# 
+# #merge taxa_table
+# new_taxa_table<-merge(mots.taxa.csv,temp_meta_file,by=0)
+# library(tibble)
+# new_taxa_table<-column_to_rownames(new_taxa_table, var = "Row.names")
+# 
+# #reorder
+# new_taxa_table<-new_taxa_table %>% 
+#    # dplyr::relocate(disp) %>% ## simply make disp the first column
+#    relocate(c("Domain":"Species"))
+# 
+# 
+# #save as csv and check file for errors
+# write.csv(new_taxa_table, "~/base data/taxa_table.csv", row.names = T)
+
+
+
+
+mots.taxa.matrix <- as.matrix(mots.taxa.csv)
+
+mots.taxa <- tax_table(mots.taxa.matrix)
+
+
+#Meta-data
+mots.sample.meta <- read.csv(file="~/base data/mots_meta.csv", header = TRUE, fileEncoding="UTF-8-BOM", check.names = FALSE, row.names = 1)
+mots.meta.df <- as.data.frame(mots.sample.meta)
+
+mots.meta <- sample_data(mots.meta.df)
+
+
+#Fix samples names to link w/ OTU
+
+sample_names(mots.meta) <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83") # don't do this manually 
+# sample_names(mots.meta) <-as.character(seq(1:83)) 
+
+
+#Create phyloseq object
+mots.phylo <- phyloseq(mots.otu, mots.taxa, mots.meta)
+
+#DRAM input
+##NMDS plot using total functional data DRAM
+##plot with watermass as colours
+##NMDS plot using total functional data DRAM
+##plot with watermass as colours
+MISC1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "MISC")
+
+MISC1 <-MISC1 %>%
+  mutate(MISC1,"function_description" = "Misc", .after = gene_description)
+
+carbon_utilization1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "carbon utilization")
+
+carbon_utilization1 <-carbon_utilization1 %>%
+  mutate(carbon_utilization1,"function_description" = "carbon utilization", .after = gene_description)
+
+Transporters1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "Transporters")
+
+Transporters1 <-Transporters1 %>%
+  mutate(Transporters1,"function_description" = "Transporters", .after = gene_description)
+
+Energy1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "Energy")
+
+Energy1 <-Energy1 %>%
+  mutate(Energy1,"function_description" = "Energy", .after = gene_description)
+
+organic_nitrogen1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen1 <-organic_nitrogen1 %>%
+  mutate(organic_nitrogen1,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+Woodcroft1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft1 <-Woodcroft1 %>%
+  mutate(Woodcroft1,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+rRNA1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "rRNA")
+
+rRNA1 <-rRNA1 %>%
+  mutate(rRNA1,"function_description" = "rRNA", .after = gene_description)
+
+tRNA1 <- read_excel("~/base data/metabolism_summary_1.xlsx", sheet = "tRNA")
+
+tRNA1 <-tRNA1 %>%
+  mutate(tRNA1,"function_description" = "tRNA", .after = gene_description)
+
+
+
+##2_genome_summaries
+MISC2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "MISC")
+
+MISC2 <-MISC2 %>%
+  mutate(MISC2,"function_description" = "Misc", .after = gene_description)
+
+MISC2 <- subset(MISC2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "carbon utilization")
+
+carbon_utilization2 <-carbon_utilization2 %>%
+  mutate(carbon_utilization2,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization2 <- subset(carbon_utilization2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "Transporters")
+
+Transporters2 <-Transporters2 %>%
+  mutate(Transporters2,"function_description" = "Transporters", .after = gene_description)
+
+Transporters2 <- subset(Transporters2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "Energy")
+
+Energy2 <-Energy2 %>%
+  mutate(Energy2,"function_description" = "Energy", .after = gene_description)
+
+Energy2 <- subset(Energy2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen2 <-organic_nitrogen2 %>%
+  mutate(organic_nitrogen2,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen2 <- subset(organic_nitrogen2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft2 <-Woodcroft2 %>%
+  mutate(Woodcroft2,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft2 <- subset(Woodcroft2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "rRNA")
+
+rRNA2 <-rRNA2 %>%
+  mutate(rRNA2,"function_description" = "rRNA", .after = gene_description)
+
+rRNA2 <- subset(rRNA2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA2 <- read_excel("~/base data/metabolism_summary_2.xlsx", sheet = "tRNA")
+
+tRNA2 <-tRNA2 %>%
+  mutate(tRNA2,"function_description" = "tRNA", .after = gene_description)
+
+tRNA2 <- subset(tRNA2, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+##3_genome_summaries
+MISC3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "MISC")
+
+MISC3 <-MISC3 %>%
+  mutate(MISC3,"function_description" = "Misc", .after = gene_description)
+
+MISC3 <- subset(MISC3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "carbon utilization")
+
+carbon_utilization3 <-carbon_utilization3 %>%
+  mutate(carbon_utilization3,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization3 <- subset(carbon_utilization3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "Transporters")
+
+Transporters3 <-Transporters3 %>%
+  mutate(Transporters3,"function_description" = "Transporters", .after = gene_description)
+
+Transporters3 <- subset(Transporters3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "Energy")
+
+Energy3 <-Energy3 %>%
+  mutate(Energy3,"function_description" = "Energy", .after = gene_description)
+
+Energy3 <- subset(Energy3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen3 <-organic_nitrogen3 %>%
+  mutate(organic_nitrogen3,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen3 <- subset(organic_nitrogen3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft3 <-Woodcroft3 %>%
+  mutate(Woodcroft3,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft3 <- subset(Woodcroft3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "rRNA")
+
+rRNA3 <-rRNA3 %>%
+  mutate(rRNA3,"function_description" = "rRNA", .after = gene_description)
+
+rRNA3 <- subset(rRNA3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA3 <- read_excel("~/base data/metabolism_summary_3.xlsx", sheet = "tRNA")
+
+tRNA3 <-tRNA3 %>%
+  mutate(tRNA3,"function_description" = "tRNA", .after = gene_description)
+
+tRNA3 <- subset(tRNA3, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+##4_genome_summaries
+MISC4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "MISC")
+
+MISC4 <-MISC4 %>%
+  mutate(MISC4,"function_description" = "Misc", .after = gene_description)
+
+MISC4 <- subset(MISC4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "carbon utilization")
+
+carbon_utilization4 <-carbon_utilization4 %>%
+  mutate(carbon_utilization4,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization4 <- subset(carbon_utilization4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "Transporters")
+
+Transporters4 <-Transporters4 %>%
+  mutate(Transporters4,"function_description" = "Transporters", .after = gene_description)
+
+Transporters4 <- subset(Transporters4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "Energy")
+
+Energy4 <-Energy4 %>%
+  mutate(Energy4,"function_description" = "Energy", .after = gene_description)
+
+Energy4 <- subset(Energy4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen4 <-organic_nitrogen4 %>%
+  mutate(organic_nitrogen4,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen4 <- subset(organic_nitrogen4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft4 <-Woodcroft4 %>%
+  mutate(Woodcroft4,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft4 <- subset(Woodcroft4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "rRNA")
+
+rRNA4 <-rRNA4 %>%
+  mutate(rRNA4,"function_description" = "rRNA", .after = gene_description)
+
+rRNA4 <- subset(rRNA4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA4 <- read_excel("~/base data/metabolism_summary_4.xlsx", sheet = "tRNA")
+
+tRNA4 <-tRNA4 %>%
+  mutate(tRNA4,"function_description" = "tRNA", .after = gene_description)
+
+tRNA4 <- subset(tRNA4, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+
+##5_genome_summaries
+MISC5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "MISC")
+
+MISC5 <-MISC5 %>%
+  mutate(MISC5,"function_description" = "Misc", .after = gene_description)
+
+MISC5 <- subset(MISC5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "carbon utilization")
+
+carbon_utilization5 <-carbon_utilization5 %>%
+  mutate(carbon_utilization5,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization5 <- subset(carbon_utilization5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "Transporters")
+
+Transporters5 <-Transporters5 %>%
+  mutate(Transporters5,"function_description" = "Transporters", .after = gene_description)
+
+Transporters5 <- subset(Transporters5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "Energy")
+
+Energy5 <-Energy5 %>%
+  mutate(Energy5,"function_description" = "Energy", .after = gene_description)
+
+Energy5 <- subset(Energy5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen5 <-organic_nitrogen5 %>%
+  mutate(organic_nitrogen5,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen5 <- subset(organic_nitrogen5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft5 <-Woodcroft5 %>%
+  mutate(Woodcroft5,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft5 <- subset(Woodcroft5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "rRNA")
+
+rRNA5 <-rRNA5 %>%
+  mutate(rRNA5,"function_description" = "rRNA", .after = gene_description)
+
+rRNA5 <- subset(rRNA5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA5 <- read_excel("~/base data/metabolism_summary_5.xlsx", sheet = "tRNA")
+
+tRNA5 <-tRNA5 %>%
+  mutate(tRNA5,"function_description" = "tRNA", .after = gene_description)
+
+tRNA5 <- subset(tRNA5, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+##6_genome_summaries
+MISC6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "MISC")
+
+MISC6 <-MISC6 %>%
+  mutate(MISC6,"function_description" = "Misc", .after = gene_description)
+
+MISC6 <- subset(MISC6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "carbon utilization")
+
+carbon_utilization6 <-carbon_utilization6 %>%
+  mutate(carbon_utilization6,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization6 <- subset(carbon_utilization6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "Transporters")
+
+Transporters6 <-Transporters6 %>%
+  mutate(Transporters6,"function_description" = "Transporters", .after = gene_description)
+
+Transporters6 <- subset(Transporters6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "Energy")
+
+Energy6 <-Energy6 %>%
+  mutate(Energy6,"function_description" = "Energy", .after = gene_description)
+
+Energy6 <- subset(Energy6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen6 <-organic_nitrogen6 %>%
+  mutate(organic_nitrogen6,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen6 <- subset(organic_nitrogen6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft6 <-Woodcroft6 %>%
+  mutate(Woodcroft6,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft6 <- subset(Woodcroft6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "rRNA")
+
+rRNA6 <-rRNA6 %>%
+  mutate(rRNA6,"function_description" = "rRNA", .after = gene_description)
+
+rRNA6 <- subset(rRNA6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA6 <- read_excel("~/base data/metabolism_summary_6.xlsx", sheet = "tRNA")
+
+tRNA6 <-tRNA6 %>%
+  mutate(tRNA6,"function_description" = "tRNA", .after = gene_description)
+
+tRNA6 <- subset(tRNA6, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+
+##7_genome_summaries
+MISC7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "MISC")
+
+MISC7 <-MISC7 %>%
+  mutate(MISC7,"function_description" = "Misc", .after = gene_description)
+
+MISC7 <- subset(MISC7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "carbon utilization")
+
+carbon_utilization7 <-carbon_utilization7 %>%
+  mutate(carbon_utilization7,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization7 <- subset(carbon_utilization7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "Transporters")
+
+Transporters7 <-Transporters7 %>%
+  mutate(Transporters7,"function_description" = "Transporters", .after = gene_description)
+
+Transporters7 <- subset(Transporters7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "Energy")
+
+Energy7 <-Energy7 %>%
+  mutate(Energy7,"function_description" = "Energy", .after = gene_description)
+
+Energy7 <- subset(Energy7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen7 <-organic_nitrogen7 %>%
+  mutate(organic_nitrogen7,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen7 <- subset(organic_nitrogen7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft7 <-Woodcroft7 %>%
+  mutate(Woodcroft7,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft7 <- subset(Woodcroft7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "rRNA")
+
+rRNA7 <-rRNA7 %>%
+  mutate(rRNA7,"function_description" = "rRNA", .after = gene_description)
+
+rRNA7 <- subset(rRNA7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA7 <- read_excel("~/base data/metabolism_summary_7.xlsx", sheet = "tRNA")
+
+tRNA7 <-tRNA7 %>%
+  mutate(tRNA7,"function_description" = "tRNA", .after = gene_description)
+
+tRNA7 <- subset(tRNA7, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+##8_genome_summaries
+MISC8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "MISC")
+
+MISC8 <-MISC8 %>%
+  mutate(MISC8,"function_description" = "Misc", .after = gene_description)
+
+MISC8 <- subset(MISC8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "carbon utilization")
+
+carbon_utilization8 <-carbon_utilization8 %>%
+  mutate(carbon_utilization8,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization8 <- subset(carbon_utilization8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "Transporters")
+
+Transporters8 <-Transporters8 %>%
+  mutate(Transporters8,"function_description" = "Transporters", .after = gene_description)
+
+Transporters8 <- subset(Transporters8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "Energy")
+
+Energy8 <-Energy8 %>%
+  mutate(Energy8,"function_description" = "Energy", .after = gene_description)
+
+Energy8 <- subset(Energy8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen8 <-organic_nitrogen8 %>%
+  mutate(organic_nitrogen8,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen8 <- subset(organic_nitrogen8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft8 <-Woodcroft8 %>%
+  mutate(Woodcroft8,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft8 <- subset(Woodcroft8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "rRNA")
+
+rRNA8 <-rRNA8 %>%
+  mutate(rRNA8,"function_description" = "rRNA", .after = gene_description)
+
+rRNA8 <- subset(rRNA8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA8 <- read_excel("~/base data/metabolism_summary_8.xlsx", sheet = "tRNA")
+
+tRNA8 <-tRNA8 %>%
+  mutate(tRNA8,"function_description" = "tRNA", .after = gene_description)
+
+tRNA8 <- subset(tRNA8, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+##9_genome_summaries
+MISC9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "MISC")
+
+MISC9 <-MISC9 %>%
+  mutate(MISC9,"function_description" = "Misc", .after = gene_description)
+
+MISC9 <- subset(MISC9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+carbon_utilization9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "carbon utilization")
+
+carbon_utilization9 <-carbon_utilization9 %>%
+  mutate(carbon_utilization9,"function_description" = "carbon utilization", .after = gene_description)
+
+carbon_utilization9 <- subset(carbon_utilization9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Transporters9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "Transporters")
+
+Transporters9 <-Transporters9 %>%
+  mutate(Transporters9,"function_description" = "Transporters", .after = gene_description)
+
+Transporters9 <- subset(Transporters9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Energy9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "Energy")
+
+Energy9 <-Energy9 %>%
+  mutate(Energy9,"function_description" = "Energy", .after = gene_description)
+
+Energy9 <- subset(Energy9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+organic_nitrogen9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "Organic Nitrogen")
+
+organic_nitrogen9 <-organic_nitrogen9 %>%
+  mutate(organic_nitrogen9,"function_description" = "Organic Nitrogen", .after = gene_description)
+
+organic_nitrogen9 <- subset(organic_nitrogen9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+Woodcroft9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "carbon utilization (Woodcroft)")
+
+Woodcroft9 <-Woodcroft9 %>%
+  mutate(Woodcroft9,"function_description" = "carbon utilization (Woodcroft)", .after = gene_description)
+
+Woodcroft9 <- subset(Woodcroft9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+rRNA9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "rRNA")
+
+rRNA9 <-rRNA9 %>%
+  mutate(rRNA9,"function_description" = "rRNA", .after = gene_description)
+
+rRNA9 <- subset(rRNA9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+tRNA9 <- read_excel("~/base data/metabolism_summary_9.xlsx", sheet = "tRNA")
+
+tRNA9 <-tRNA9 %>%
+  mutate(tRNA9,"function_description" = "tRNA", .after = gene_description)
+
+tRNA9 <- subset(tRNA9, select = -c(gene_id, gene_description, function_description, module, header, subheader))
+
+
+MISC_combined <- dplyr::bind_cols(MISC1,MISC2,MISC3,MISC4,MISC5,MISC6,MISC7,MISC8,MISC9)
+
+carbon_utilization_combined <- dplyr::bind_cols(carbon_utilization1,carbon_utilization2,carbon_utilization3,carbon_utilization4,carbon_utilization5,carbon_utilization6,carbon_utilization7,carbon_utilization8,carbon_utilization9)
+
+Transporters_combined <- dplyr::bind_cols(Transporters1,Transporters2,Transporters3,Transporters4,Transporters5,Transporters6,Transporters7,Transporters8,Transporters9)
+
+Energy_combined <- dplyr::bind_cols(Energy1,Energy2,Energy3,Energy4,Energy5,Energy6,Energy7,Energy8,Energy9)
+
+organic_nitrogen_combined <- dplyr::bind_cols(organic_nitrogen1,organic_nitrogen2,organic_nitrogen3,organic_nitrogen4,organic_nitrogen5,organic_nitrogen6,organic_nitrogen7,organic_nitrogen8,organic_nitrogen9)
+
+Woodcroft_combined <- dplyr::bind_cols(Woodcroft1,Woodcroft2,Woodcroft3,Woodcroft4,Woodcroft5,Woodcroft6,Woodcroft7,Woodcroft8,Woodcroft9)
+
+rRNA_combined <- dplyr::bind_cols(rRNA1,rRNA2,rRNA3,rRNA4,rRNA5,rRNA6,rRNA7,rRNA8,rRNA9)
+
+#tRNA_combined <- dplyr::bind_cols(tRNA1,tRNA2,tRNA3,tRNA4,tRNA5,tRNA6,tRNA7,tRNA8,tRNA9)
+
+metabolism_summary<-dplyr::bind_rows(MISC_combined,carbon_utilization_combined,Transporters_combined,Energy_combined,organic_nitrogen_combined,Woodcroft_combined,rRNA_combined)
+
+product1 <- read.csv("~/base data/product_1.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product2 <- read.csv("~/base data/product_2.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product3 <- read.csv("~/base data/product_3.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product4 <- read.csv("~/base data/product_4.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product5 <- read.csv("~/base data/product_5.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product6 <- read.csv("~/base data/product_6.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product7 <- read.csv("~/base data/product_7.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product8 <- read.csv("~/base data/product_8.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+product9 <- read.csv("~/base data/product_9.tsv",fill = TRUE, header = TRUE, sep = "\t",check.names=FALSE)
+```
+
+```{Figure S2 Sankey}
+
+
+```
+
+```{Figure S3}
+
+
+#Melt phyloseq object
+
+rank_df <- mots.taxa.csv[ -c(8:15) ]
+
+#rank_df[is.na(rank_df)] <- Unclassified
+
+#calculate unique levels by rank
+rank_summary <-as.data.frame(apply(rank_df, 2, function(x) length(unique(x))))
+rank_summary
+
+library(tibble)
+rank_summary<-rank_df %>% 
+  #group_by(Watermass) %>%
+  summarise_all(n_distinct)%>% 
+  t()%>%
+  data.frame()%>%
+  rownames_to_column(var = "Rank")%>%
+  rename_with(.cols = 2, ~"Count")
+
+rank_summary
+
+#calculate the number of BINS classified at each rank
+rank_summary$Count <-as.numeric(rank_summary$Count)
+rank_summary$Unclassified_count <-colSums(is.na(rank_df) | rank_df == "")
+rank_summary$Classified_count<-1027-rank_summary$Unclassified_count
+rank_summary$percent_bins_classified<- ((rank_summary$Classified_count)/nrow(rank_df))*100
+
+#reorder Ranks
+rank_summary$Rank <- factor(rank_summary$Rank, levels=c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Watermass"))
+
+rank_summary <- rank_summary[-8,]
+
+#Created by Cecilia Wang. Make function to collect info on classification per rank
+
+#for (i in 1:nrow(mots.taxa.csv)){
+#if (mots.taxa.csv[i,2] == ""){
+#kingdom <- paste("Kingdom_", mots.taxa.csv[i,1], sep = "")
+#mots.taxa.csv[i, 2:7] <- kingdom
+#} else if (mots.taxa.csv[i,3] == ""){
+#phylum <- paste("Phylum_", mots.taxa.csv[i,2], sep = "")
+#mots.taxa.csv[i, 3:7] <- phylum
+#} else if (mots.taxa.csv[i,4] == ""){
+#class <- paste("Class_", mots.taxa.csv[i,3], sep = "")
+#mots.taxa.csv[i, 4:7] <- class
+#} else if (mots.taxa.csv[i,5] == ""){
+#order <- paste("Order_", mots.taxa.csv[i,4], sep = "")
+#mots.taxa.csv[i, 5:7] <- order
+#} else if (mots.taxa.csv[i,6] == ""){
+#family <- paste("Family_", mots.taxa.csv[i,5], sep = "")
+#mots.taxa.csv[i, 6:7] <- family
+#} else if (mots.taxa.csv[i,7] == ""){
+#mots.taxa.csv$Species[i] <- paste("Genus", mots.taxa.csv$Genus[i], sep = "_")
+#}
+#}
+
+
+rank_df <- mots.taxa.csv[ -c(8:15) ]
+
+unique_bin_across_rank<-function(df){
+  rank_sum<-NULL # create an empty variable to save results into a table
+  for (r in colnames(df)) {
+    # print(r) # sanity check
+    t<-data.frame(rank_df[r],rank_df[,"Phylum"]) %>% rownames_to_column() # collect info of a certain rank name, the phylum name, and the bin ID.
+    temp_df<-t %>% dplyr::group_by(t[,c(2,3)]) %>% dplyr::summarise(bin_count=length(unique(rowname))) # group by phylum and another rank, then count the number of unique bins
+    colnames(temp_df)<-c("taxa_name","Phylum","bin_count") # change column names so the temp dataframe can be combined
+    temp_df$rank<-r # add a column to record the rank name
+    rank_sum<-rbind(temp_df,rank_sum) # combine all temp data
+  }
+  return(rank_sum) # export the results
+}
+
+rank_df_less_watermass <- rank_df[-8]
+
+unique_bin_across_rank_summary<-unique_bin_across_rank(rank_df_less_watermass)
+
+Phylum_rank_bin_summary<-unique_bin_across_rank_summary[unique_bin_across_rank_summary$taxa_name!="",] %>% dplyr::group_by(Phylum,rank) %>% dplyr::summarise(unique_bin_count=sum(bin_count),unique_taxa=length(unique(taxa_name)))
+
+unique_bin_across_rank_summary_phylum_sum<-subset(unique_bin_across_rank_summary, unique_bin_across_rank_summary$rank=="Phylum")
+
+Phylum_rank_bin_summary$total_bin_by_phyla<-unique_bin_across_rank_summary_phylum_sum$bin_count[match(Phylum_rank_bin_summary$Phylum,unique_bin_across_rank_summary_phylum_sum$Phylum)]
+
+
+conflict_prefer(ggpubr::mutate)
+Phylum_rank_bin_summary <- Phylum_rank_bin_summary%>%
+  dplyr::rename(Phylum = 1,
+                Rank = 2,
+                Number_of_classified_bins = 3,
+                Number_of_unique_groups = 4)%>%
+  ggpubr::mutate(Rank=factor(Rank), Phylum=factor(Phylum)) %>% 
+  ggpubr::mutate(Rank=fct_relevel(Rank,c("Domain","Phylum","Class","Order", "Family", "Genus","Species")))
+Phylum_rank_bin_summary$classified_bin_percent<-Phylum_rank_bin_summary$Number_of_classified_bins/Phylum_rank_bin_summary$total_bin_by_phyla*100 
+
+library(viridis)
+
+
+#reorder Phyla by highest number of bins and replot
+Phylum_rank_bin_summary$Phylum<-factor(Phylum_rank_bin_summary$Phylum,levels =c( "Proteobacteria","Bacteroidota","Thermoplasmatota","Verrucomicrobiota","Actinobacteriota","Cyanobacteria","Chloroflexota","Crenarchaeota","Planctomycetota","SAR324","Gemmatimonadota","Acidobacteriota","Nitrospinota","Myxococcota","Binatota","Dadabacteria","Fibrobacterota","Marinisomatota") )
+
+ggplot(Phylum_rank_bin_summary,aes(x= Rank, y= Number_of_unique_groups, size=classified_bin_percent)) + 
+  facet_wrap(~Phylum)+
+  geom_point(stat="identity")+
+  labs(y="Number of Distinct Taxa", x="Taxonomic Rank", size = "Percent of classified MAGS") +
+  theme(axis.title.x = element_text(face="bold",size=20),
+        axis.text.x = element_text(angle=45, colour = "black", size=14,vjust = 0.5, hjust=0.5), 
+        axis.text.y = element_text(colour = "black", size=14),
+        axis.title.y = element_text(face="bold",size=14),
+        plot.title = element_text(size = 12),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 14),
+        legend.position="right",
+        legend.key.size = unit(1, "cm"),
+        panel.background = element_blank(),
+        strip.text.x = element_text(size=14, color="black"),
+        panel.border = element_rect(fill = NA, colour = "black"))+
+  scale_size_continuous(limits = c(0, 100),breaks=c(1,10,100))+
+  scale_y_continuous(limits = c(0, 100),breaks=c(1,20,40,60,80,100))
+
+```
+
+```{Figure S4-6}
+##FOR STW
+MOTS_bin_base_data <- read.csv("~/base data/MOTS_bin_func_long.csv", header = TRUE)
+
+conflicts_prefer(dplyr::summarise)
+
+counts <- MOTS_bin_base_data %>%
+  group_by(Watermass, Phylum, Gene, Category) %>%
+  summarise(across(c(Counts), sum))
+
+completeness <- MOTS_bin_base_data %>%
+  group_by(Watermass, Phylum, Gene, Category) %>%
+  summarise(across(c(Completeness), mean))
+
+#MOTS_bin_base_data <- merge(counts$Counts, completeness$Completeness)
+MOTS_bin_base_data <- cbind(counts, completeness$Completeness)
+names(MOTS_bin_base_data)[names(MOTS_bin_base_data) == '...6'] <- 'Completeness'
+
+
+MOTS_bin_func_STW_long = subset(MOTS_bin_base_data, Watermass == "STW")
+MOTS_bin_func_SAW_long = subset(MOTS_bin_base_data, Watermass == "SAW")
+MOTS_bin_func_Deep_long = subset(MOTS_bin_base_data, Watermass == "Deep")
+
+
+
+#Remove count data that are showing up as NA
+MOTS_bin_func_STW_long=na.omit(MOTS_bin_func_STW_long)
+
+#Order phylum ascending
+MOTS_bin_func_STW_long$Phylum=factor(MOTS_bin_func_STW_long$Phylum, levels=c("Dadabacteria","Binatota","Fibrobacterota","Marinisomatota","Myxococcota","Nitrospinota","Acidobacteriota","Gemmatimonadota","Planctomycetota","SAR324",                                            "Crenarchaeota","Chloroflexota","Cyanobacteria","Verrucomicrobiota","Actinobacteriota","Bacteroidota",
+                                                                             "Thermoplasmatota","Proteobacteria"))
+
+
+library(tidyverse)
+library(grid)
+library(cowplot)
+
+
+p2_STW <- ggplot(data = MOTS_bin_func_STW_long, aes(x = Phylum, y = Gene, size=Counts))+
+  geom_point(aes(fill=Completeness),pch=21)+
+  scale_fill_viridis_c(option="plasma", limits = c(75, 90), oob = scales::squish)+ scale_size_continuous(limits=c(0,400), range=c(0.5,30), breaks=c(1, 50, 100, 200 ,300))+
+  facet_grid("Category", scales = "free_y", space = "free",labeller=labeller(Category=label_wrap_gen(10)))+
+  theme(
+    panel.background = element_rect(fill = "white"),
+    panel.grid = element_line(color = "grey35"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    legend.title =element_text(face="bold",size = 24),
+    legend.text = element_text(size = 22),
+    axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, face="bold",size=22),
+    axis.text.y = element_text(size=22),
+    axis.title.x = element_text(color = "black",size=22),
+    axis.title.y = element_text(color = "black",size=22),
+    strip.background = element_rect(fill = "grey20"),
+    strip.text = element_text(colour = "white",size=5,lineheight=0.01),
+    legend.position="none"
+  )+
+  labs(y="Gene", x="Phylum")
+
+p2_STW
+
+p2_STW=p2_STW+theme(panel.spacing =unit(.05, "lines"),
+                    panel.border = element_rect(color = "black", fill = NA, size = .5), 
+                    strip.background = element_rect(color = "white", size = .5))
+
+g2_STW <- ggplot_gtable(ggplot_build(p2_STW))
+stripr <- which(grepl('strip-r', g2_STW$layout$name))
+fills <- c("cadetblue3","aquamarine2","darkgoldenrod1","lightcoral","thistle3","rosybrown4","lightsteelblue3","yellow")
+k <- 1
+for (i in stripr) {
+  j <- which(grepl('rect', g2_STW$grobs[[i]]$grobs[[1]]$childrenOrder))
+  g2_STW$grobs[[i]]$grobs[[1]]$children[[j]]$gp$fill <- fills[k]
+  k <- k+1
+}
+
+grid.draw(g2_STW)
+
+
+
+func_col <- c("Alternative e acceptor"= "cadetblue3",
+              "Alternative e donor"="aquamarine2",
+              "Carbon fixation"="darkgoldenrod1",
+              "Nitrogen cycle"="lightcoral",
+              "Phototrophy"="thistle3",
+              "Respiration"="rosybrown4",
+              "Sulfur cycle"="lightsteelblue3",
+              "Trace gas metabolism
+"="yellow")
+
+
+legend_func<-ggplot(MOTS_bin_func_STW_long, aes(x=Category, fill=Phylum)) +
+  geom_bar(stat="count")+
+  scale_fill_manual(values = func_col)+
+  My_Theme+
+  theme(legend.position="bottom",
+        legend.text = element_text(size = 8),
+        legend.key.size = unit(0.5, "cm"))+
+  guides(fill=guide_legend(nrow=2))
+
+
+#Save the legend  
+func_legend <- get_legend(legend_func)
+grid.newpage()
+grid.draw(func_legend)
+
+
+
+
+p2_SAW <- ggplot(data = MOTS_bin_func_SAW_long, aes(x = Phylum, y = Gene, size=Counts))+
+  geom_point(aes(fill=Completeness),pch=21)+
+  scale_fill_viridis_c(option="plasma", limits = c(75, 90), oob = scales::squish)+ scale_size_continuous(limits=c(0,400), range=c(0.5,30), breaks=c(1, 50, 100, 200 ,300))+
+  facet_grid("Category", scales = "free_y", space = "free",labeller=labeller(Category=label_wrap_gen(10)))+
+  theme(
+    panel.background = element_rect(fill = "white"),
+    panel.grid = element_line(color = "grey35"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    legend.title =element_text(face="bold",size = 24),
+    legend.text = element_text(size = 22),
+    axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, face="bold",size=22),
+    axis.text.y = element_text(size=22),
+    axis.title.x = element_text(color = "black",size=22),
+    axis.title.y = element_text(color = "black",size=22),
+    strip.background = element_rect(fill = "grey20"),
+    strip.text = element_text(colour = "white",size=5,lineheight=0.01),
+    legend.position="none"
+  )+
+  labs(y="Gene", x="Phylum")
+
+p2_SAW
+
+p2_SAW=p2_SAW+theme(panel.spacing =unit(.05, "lines"),
+                    panel.border = element_rect(color = "black", fill = NA, size = .5), 
+                    strip.background = element_rect(color = "white", size = .5))
+
+g2_SAW <- ggplot_gtable(ggplot_build(p2_SAW))
+stripr <- which(grepl('strip-r', g2_SAW$layout$name))
+fills <- c("cadetblue3","aquamarine2","darkgoldenrod1","lightcoral","thistle3","rosybrown4","lightsteelblue3","yellow")
+k <- 1
+for (i in stripr) {
+  j <- which(grepl('rect', g2_SAW$grobs[[i]]$grobs[[1]]$childrenOrder))
+  g2_SAW$grobs[[i]]$grobs[[1]]$children[[j]]$gp$fill <- fills[k]
+  k <- k+1
+}
+
+grid.draw(g2_SAW)
+
+
+
+func_col <- c("Alternative e acceptor"= "cadetblue3",
+              "Alternative e donor"="aquamarine2",
+              "Carbon fixation"="darkgoldenrod1",
+              "Nitrogen cycle"="lightcoral",
+              "Phototrophy"="thistle3",
+              "Respiration"="rosybrown4",
+              "Sulfur cycle"="lightsteelblue3",
+              "Trace gas metabolism
+"="yellow")
+
+
+legend_func<-ggplot(MOTS_bin_func_STW_long, aes(x=Category, fill=Phylum)) +
+  geom_bar(stat="count")+
+  scale_fill_manual(values = func_col)+
+  My_Theme+
+  theme(legend.position="bottom",
+        legend.text = element_text(size = 8),
+        legend.key.size = unit(0.5, "cm"))+
+  guides(fill=guide_legend(nrow=2))
+
+
+#Save the legend  
+func_legend <- get_legend(legend_func)
+grid.newpage()
+grid.draw(func_legend)
+
+
+
+p2_Deep <- ggplot(data = MOTS_bin_func_Deep_long, aes(x = Phylum, y = Gene, size=Counts))+
+  geom_point(aes(fill=Completeness),pch=21)+
+  scale_fill_viridis_c(option="plasma", limits = c(75, 90), oob = scales::squish)+ scale_size_continuous(limits=c(0,400), range=c(0.5,30), breaks=c(1, 50, 100, 200 ,300))+
+  facet_grid("Category", scales = "free_y", space = "free",labeller=labeller(Category=label_wrap_gen(10)))+
+  theme(
+    panel.background = element_rect(fill = "white"),
+    panel.grid = element_line(color = "grey35"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    legend.title =element_text(face="bold",size = 24),
+    legend.text = element_text(size = 22),
+    axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, face="bold",size=22),
+    axis.text.y = element_text(size=22),
+    axis.title.x = element_text(color = "black",size=22),
+    axis.title.y = element_text(color = "black",size=22),
+    strip.background = element_rect(fill = "grey20"),
+    strip.text = element_text(colour = "white",size=5,lineheight=0.01),
+    legend.position="none"
+  )+
+  labs(y="Gene", x="Phylum")
+
+p2_Deep
+
+p2_Deep=p2_Deep + My_Theme
+#+theme(panel.spacing =unit(.05, "lines"),
+panel.border = element_rect(color = "black", fill = NA, size = .5)
+strip.background = element_rect(color = "white", size = .5)
+
+g2_Deep <- ggplot_gtable(ggplot_build(p2_Deep))
+stripr <- which(grepl('strip-r', g2_Deep$layout$name))
+fills <- c("cadetblue3","aquamarine2","darkgoldenrod1","lightcoral","thistle3","rosybrown4","lightsteelblue3","yellow")
+k <- 1
+for (i in stripr) {
+  j <- which(grepl('rect', g2_Deep$grobs[[i]]$grobs[[1]]$childrenOrder))
+  g2_Deep$grobs[[i]]$grobs[[1]]$children[[j]]$gp$fill <- fills[k]
+  k <- k+1
+}
+
+grid.draw(g2_Deep)
+
+
+
+func_col <- c("Alternative e acceptor"= "cadetblue3",
+              "Alternative e donor"="aquamarine2",
+              "Carbon fixation"="darkgoldenrod1",
+              "Nitrogen cycle"="lightcoral",
+              "Phototrophy"="thistle3",
+              "Respiration"="rosybrown4",
+              "Sulfur cycle"="lightsteelblue3",
+              "Trace gas metabolism
+"="yellow")
+
+
+legend_func<-ggplot(MOTS_bin_func_STW_long, aes(x=Category, fill=Phylum)) +
+  geom_bar(stat="count")+
+  scale_fill_manual(values = func_col)+
+  My_Theme+
+  theme(legend.position="bottom",
+        legend.text = element_text(size = 8),
+        legend.key.size = unit(0.5, "cm"))+
+  guides(fill=guide_legend(nrow=2))
+
+
+#Save the legend  
+func_legend <- get_legend(legend_func)
+grid.newpage()
+grid.draw(func_legend)
+
+
+
+grid.arrange(g2_STW, func_legend, ncol=1, nrow=2, widths=c(8), heights=c(10, 1))
+
+
+grid.arrange(g2_SAW, func_legend, ncol=1, nrow=2, widths=c(8), heights=c(10, 1))
+
+
+
+grid.arrange(g2_Deep, func_legend, ncol=1, nrow=2, widths=c(8), heights=c(10, 1))
+
+
+
+```
+
+```{Figure S7}
+metabolism_summary_for_dotplot_watermass <- merge(metabolism_summary_for_dotplot, NMDS_metadata, by.x = "bin", by.y = "bin_ID")
+metabolism_summary_for_dotplot_watermass <- subset(metabolism_summary_for_dotplot_watermass, select = -c(gene_description, gene_id, function_description, module, subheader, cluster, Sample, bin, Phylum))
+
+conflicts_prefer(dplyr::filter)
+metabolism_summary_for_dotplot_watermass <- filter(metabolism_summary_for_dotplot_watermass, count > 0)
+
+library(data.table)
+setDT(metabolism_summary_for_dotplot_watermass)
+metabolism_summary_for_dotplot_watermass1  = metabolism_summary_for_dotplot_watermass [ , .(counted = sum(count)), by = .(header, Watermass)]
+
+
+metabolism_summary_for_dotplot_watermass1$Watermass <- factor(metabolism_summary_for_dotplot_watermass1$Watermass,levels = c("Neritic", "STW", "Front", "SAW", "Deep"))
+
+metabolism_summary_for_dotplot_watermass$Watermass <- factor(metabolism_summary_for_dotplot_watermass$Watermass,levels = c("Neritic", "STW", "Front", "SAW", "Deep"))
+
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"central carbon", "Central carbon")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"Electron transport Chain", "Electron transport chain")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"Antibiotic Resistance", "Antibiotic resistance")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"pyruvate metabolism", "Pyruvate metabolism")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"Flagella Structure", "Flagella structure")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"hydrocarbon degradation", "Hydrocarbon degradation")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"sugar utilization (woodcroft)", "Sugar utilization (Woodcroft)")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"aerobic corrin ring synthesis", "Aerobic corrin ring synthesis")
+metabolism_summary_for_dotplot_watermass1$header <- str_replace(metabolism_summary_for_dotplot_watermass1$header,"Metal Reduction", "Metal reduction")
+
+for_watermass_bin <- subset(All_bins, select = c(Watermass))
+conflicts_prefer(dplyr::count)
+for_watermass_bin_count <- dplyr::rename(count(for_watermass_bin, Watermass), Freq = n)
+for_watermass_bin_count$Watermass <- str_replace(for_watermass_bin_count$Watermass,"NW", "Neritic")
+
+metabolism_summary_for_dotplot_watermass_norm <- merge(metabolism_summary_for_dotplot_watermass1, for_watermass_bin_count, by = "Watermass")
+metabolism_summary_for_dotplot_watermass_norm$norm <- metabolism_summary_for_dotplot_watermass_norm$counted/metabolism_summary_for_dotplot_watermass_norm$Freq
+
+
+DRAM_overview_between_watermass <- ggplot(metabolism_summary_for_dotplot_watermass1, aes(x = reorder(header, -counted), y = counted), group = counted, color = Watermass) +
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  geom_point(size = 3, aes(color = factor(Watermass))) +
+  labs(x = "Gene category", y = "Total gene counts per water mass (Log)", color = "Watermass") +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(angle=90, colour = "black", vjust=0.5, hjust = 1, size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 22),
+        legend.title =element_text(face="bold",size = 24),
+        legend.text = element_text(size = 22),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=18, face="bold"),
+        strip.text.y = element_text(size=18, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) +
+  scale_y_continuous(trans='log10')
+
+DRAM_overview_between_watermass_norm <- ggplot(metabolism_summary_for_dotplot_watermass_norm, aes(x = reorder(header, -norm), y = norm), group = norm, color = Watermass) +
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  geom_point(size = 3, aes(color = factor(Watermass))) +
+  labs(x = "Gene category", y = "Normalized total gene counts per water mass (Log)", color = "Watermass") +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(angle=90, colour = "black", vjust=0.5, hjust = 1, size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 22),
+        legend.title =element_text(face="bold",size = 24),
+        legend.text = element_text(size = 22),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=18, face="bold"),
+        strip.text.y = element_text(size=18, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) +
+  scale_y_continuous(trans='log10')
+
+
+
+#view
+DRAM_overview_between_watermass
+
+
+
+
+
+#view
+DRAM_overview_between_watermass_norm
+
+
+
+```
+
+```{r Figure S8}
+remove(product_combined)
+product_combined <- dplyr::bind_rows(product1, product2, product3, product4, product5, product6, product7, product8, product9)
+
+remove(mdata)
+
+Row_clusters<-NMDS_metadata[ -c(2,5)]
+Row_clusters<-distinct(Row_clusters,bin_ID,.keep_all= TRUE)
+rownames(Row_clusters) <- Row_clusters$bin_ID
+Row_clusters$Phylum<-as.character(Row_clusters$Phylum)
+Row_clusters <- Row_clusters[ -c(1) ]
+
+#Row_clusters<-rename(Row_clusters, c("ANI_Cluster" = "mOTU"))
+
+#keep only bins being analysed
+conflicts_prefer(rstatix::filter)
+product_combined<-filter(product_combined, genome %in% All_bins$Bin_ID)
+
+
+#split into presence/absence vs pathway completeness results
+all_bin_pcompleteness <- product_combined[ -c(34:99) ]
+
+all_bin_cazy <- product_combined[ -c(2:33) ]
+
+#rename 'genome' to 'Bin_ID' for consistency
+conflicts_prefer(plyr::rename)
+all_bin_pcompleteness<-rename(all_bin_pcompleteness, c("genome" = "Bin_ID" ))
+all_bin_cazy<-rename(all_bin_cazy, c("genome" = "Bin_ID"  ))
+
+#remove duplicate rows/bins
+all_bin_pcompleteness<-unique(all_bin_pcompleteness, by = "Bin_ID")
+all_bin_cazy<-unique(all_bin_cazy, by = "Bin_ID")
+
+#replace True/False for 1/0
+all_bin_cazy[all_bin_cazy == "False"] <- "0"
+all_bin_cazy[all_bin_cazy == "True"] <- "1"
+
+#make functional data into matrix
+
+rownames(all_bin_pcompleteness) <- all_bin_pcompleteness$Bin_ID
+
+#identify and delete genes with no hits
+all_bin_pcompleteness<-all_bin_pcompleteness[, colSums(all_bin_pcompleteness != 0) > 0]
+pcompleteness_matrix <- as.matrix(all_bin_pcompleteness[,-1])
+
+rownames(pcompleteness_matrix) <- all_bin_pcompleteness[,1]
+
+
+completeness_matrix <- mapply(pcompleteness_matrix, FUN=as.numeric)
+completeness_matrix <- matrix(data=completeness_matrix, ncol=length(colnames(pcompleteness_matrix)), nrow=length(row.names(pcompleteness_matrix)))
+row.names(completeness_matrix) <- row.names(pcompleteness_matrix)
+colnames(completeness_matrix) <- colnames(pcompleteness_matrix)
+
+library(pheatmap)
+pheatmap(completeness_matrix)
+
+
+#import modified annotations
+functional_categories <- read.csv("~/base data/functional_catgories_rev.csv",fill = TRUE, header = TRUE, sep = ",")
+
+#subset by those detected
+func_list <- colnames(pcompleteness_matrix)
+functional_categories<-filter(functional_categories, Function %in% func_list)
+
+#Keep only two columns used for plots
+rownames(functional_categories) <- functional_categories$Function
+functional_categories <- functional_categories[ -c(1) ]
+functional_categories<-rename(functional_categories, c("Renamed_function" = "Function"))
+functional_categories_annotation <- functional_categories[ -c(2) ]
+
+
+
+#test heatmap
+pheatmap(completeness_matrix, annotation_row = Row_clusters, annotation_col = functional_categories,show_colnames=FALSE, labels_row = Row_clusters$Watermass)
+
+func_category_colour = list(
+  Phylum = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"), "Category" = c("Central C metabolism"="#000000", "ETC complex I"="#990F0F", "ETC complex II"="#99540F", "ETC complex III"="#6B990F", "ETC complex IV High affinity"="#0F6B99", "ETC complex IV Low affinity"="#260F99", "ETC complex V"="#CC79A7"))
+#set color palette
+
+func_category_colour = list(
+  Phylum = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"),
+  Watermass = c("Neritic" = "#0C0881", "STW" = "#7316A2", "Front" = "#BD5077", "SAW" = "#EA9953", "Deep" = "#F2F958"))
+
+library(viridis)
+pheatmap(completeness_matrix,
+         color=turbo(10),
+         annotation_colors = func_category_colour,
+         annotation_row = Row_clusters, 
+         annotation_col = functional_categories_annotation,
+         labels_col = functional_categories$Function,
+         show_colnames=TRUE,
+         drop_levels = TRUE,
+         annotation_legend= TRUE,
+         annotation_names_row = TRUE,
+         fontsize = 10, 
+         fontsize_row = 6, 
+         fontsize_col = 6,
+         cellwidth = 8,
+         angle_col = 45,
+         cellheight = 5,
+         cutree_rows = 6)
+
+
+
+
+
+
+```
+
+
+```{Figure S9}
+remove(product_combined)
+product_combined <- dplyr::bind_rows(product1, product2, product3, product4, product5, product6, product7, product8, product9)
+
+remove(mdata)
+
+#Row_clusters<-NMDS_metadata[ -c(2,5)]
+#Row_clusters<-distinct(Row_clusters,bin_ID,.keep_all= TRUE)
+#rownames(Row_clusters) <- Row_clusters$bin_ID
+#Row_clusters$Phylum<-as.character(Row_clusters$Phylum)
+#Row_clusters <- Row_clusters[ -c(1) ]
+
+mdata <- melt(All_bins, id=c("Bin_ID","Watermass", "Genus", "Phylum"))
+
+##combining for just by genome
+All_bins <- read.csv("~/base data/MOTS_bin_base_data.csv",fill = TRUE, header = TRUE, sep = ",")
+
+All_bins_taxa <- as.matrix(All_bins[13:19])
+
+All_bins_taxa <- tax_table(All_bins_taxa)
+
+
+All_bins_taxa <- All_bins_taxa %>%
+  tax_fix()
+
+All_bins_taxa <- data.frame(All_bins_taxa)
+
+All_bins <- All_bins %>%
+  .[-c(13:19)]
+
+All_bins_taxa$Bin_ID <- All_bins$Bin_ID
+
+All_bins <- merge(All_bins, All_bins_taxa, by = c("Bin_ID"))
+
+#All_bins <- column_to_rownames(All_bins, var = "Bin_ID")
+
+mdata <- melt(All_bins, id=c("Bin_ID","Watermass", "Phylum", "Genus"))
+
+
+
+##combining for just by genome
+product_combined_genus <- merge(product_combined, mdata, by.x = ("genome"), by.y = ("Bin_ID"))
+product_combined_genus <- subset(product_combined_genus, select = -c(genome, Watermass, Phylum, variable, value))
+
+product_combined_genus <- product_combined_genus %>%
+  select(Genus, everything())
+
+
+Row_clusters<-mdata[ -c(5:6)]
+Row_clusters<-distinct(Row_clusters,Genus,.keep_all= TRUE)
+rownames(Row_clusters) <- Row_clusters$Genus
+Row_clusters <- Row_clusters[ -c(1) ]
+#Row_clusters$Treatment<-as.character(Row_clusters$Treatment)
+
+Row_clusters <- Row_clusters[ -c(3)]
+
+
+#keep only bins being analysed
+library(conflicted)
+conflicts_prefer(rstatix::filter)
+product_combined<-filter(product_combined_genus, Genus %in% All_bins$Genus)
+
+
+
+
+#split into presence/absence vs pathway completeness results
+all_bin_pcompleteness <- product_combined[ -c(34:99) ]
+
+all_bin_cazy <- product_combined[ -c(2:33) ]
+
+#rename 'genome' to 'Bin_ID' for consistency
+conflicts_prefer(plyr::rename)
+all_bin_pcompleteness<-rename(all_bin_pcompleteness, c("Genus" = "Bin_ID" ))
+all_bin_cazy<-rename(all_bin_cazy, c("Genus" = "Bin_ID"  ))
+
+
+
+#remove duplicate rows/bins
+all_bin_pcompleteness<-unique(all_bin_pcompleteness, by = "Bin_ID")
+all_bin_cazy<-unique(all_bin_cazy, by = "Bin_ID")
+
+#replace True/False for 1/0
+all_bin_cazy[all_bin_cazy == "False"] <- "0"
+all_bin_cazy[all_bin_cazy == "True"] <- "1"
+
+#make functional data into matrix
+
+all_bin_pcompleteness <- aggregate(. ~ Bin_ID, data = all_bin_pcompleteness, FUN = mean)
+
+rownames(all_bin_pcompleteness) <- all_bin_pcompleteness$Bin_ID
+
+#identify and delete genes with no hits
+all_bin_pcompleteness<-all_bin_pcompleteness[, colSums(all_bin_pcompleteness != 0) > 0]
+pcompleteness_matrix <- as.matrix(all_bin_pcompleteness[,-1])
+
+rownames(pcompleteness_matrix) <- all_bin_pcompleteness[,1]
+
+
+completeness_matrix <- mapply(pcompleteness_matrix, FUN=as.numeric)
+completeness_matrix <- matrix(data=completeness_matrix, ncol=length(colnames(pcompleteness_matrix)), nrow=length(row.names(pcompleteness_matrix)))
+row.names(completeness_matrix) <- row.names(pcompleteness_matrix)
+colnames(completeness_matrix) <- colnames(pcompleteness_matrix)
+
+library(pheatmap)
+library(viridis)
+
+pheatmap(completeness_matrix)
+
+
+#import modified annotations
+functional_categories <- read.csv("~/base data/functional_catgories_rev.csv",fill = TRUE, header = TRUE, sep = ",")
+
+#subset by those detected
+func_list <- colnames(pcompleteness_matrix)
+functional_categories<-filter(functional_categories, Function %in% func_list)
+
+#Keep only two columns used for plots
+rownames(functional_categories) <- functional_categories$Function
+functional_categories <- functional_categories[ -c(1) ]
+functional_categories<-rename(functional_categories, c("Renamed_function" = "Function"))
+functional_categories_annotation <- functional_categories[ -c(2) ]
+
+
+
+
+
+all_bin_cazy <- read.csv("~/base data/all_bin_cazy.csv", header = TRUE)
+
+all_bin_cazy <- all_bin_cazy[-1]
+
+all_bin_cazy <- aggregate(. ~ Bin_ID, all_bin_cazy, sum)
+
+rownames(all_bin_cazy) <- all_bin_cazy$Bin_ID
+
+all_bin_cazy_list <- all_bin_cazy$Bin_ID
+
+#replace True/False for 1/0
+all_bin_cazy[all_bin_cazy > 0] <- "1"
+all_bin_cazy[all_bin_cazy == "0"] <- "0"
+
+
+
+all_bin_cazy <- all_bin_cazy[-1]
+all_bin_cazy$Bin_ID <- all_bin_cazy_list
+
+all_bin_cazy = all_bin_cazy %>% dplyr::select("Bin_ID",  
+                                              everything())
+#CAZY Summary DRAM
+rownames(all_bin_cazy) <- all_bin_cazy$Bin_ID
+
+#identify and delete genes with no hits
+all_bin_cazy<-all_bin_cazy[, colSums(all_bin_cazy != 0) > 0]
+cazy_matrix <- as.matrix(all_bin_cazy[,-1])
+
+rownames(cazy_matrix) <- all_bin_cazy[,1]
+
+
+bincazy_matrix <- mapply(cazy_matrix, FUN=as.numeric)
+bincazy_matrix <- matrix(data=bincazy_matrix, ncol=length(colnames(cazy_matrix)), nrow=length(row.names(cazy_matrix)))
+row.names(bincazy_matrix) <- row.names(cazy_matrix)
+colnames(bincazy_matrix) <- colnames(cazy_matrix)
+
+pheatmap(bincazy_matrix)
+
+#create a document with functional annotations
+cazy_categories<-as.data.frame(t(cazy_matrix))
+cazy_categories <- tibble::rownames_to_column(cazy_categories, "Cazy_Function") # Apply rownames_to_column
+#save as csv and modify file to create category annotations
+#write.csv(cazy_categories, "/Volumes/micro-shared$/MoralesLab/Projects/Syaliny_Soils/MAGs/data_analysis_by_paper/Global_MAG_paper/raw_data_for_figs/cazy_categories.csv", row.names = T)
+
+#re-import modified annotations
+cazy_categories <- read.csv("~/base data/cazy_categories_rev.csv",fill = TRUE, header = TRUE, sep = ",")
+
+#remove leading space
+cazy_categories$Renamed_function <- trimws(cazy_categories$Renamed_function, which = c("left"))
+
+#subset by those detected
+cazy_list <- colnames(cazy_matrix)
+cazy_categories<-filter(cazy_categories, Cazy_Function %in% cazy_list)
+
+#Keep only two columns used for plots
+rownames(cazy_categories) <- cazy_categories$Cazy_Function
+cazy_categories <- cazy_categories[ -c(1) ]
+cazy_categories<-rename(cazy_categories, c("Renamed_function" = "CAZy_Function"))
+cazy_categories_annotation <- cazy_categories[ -c(2) ]
+
+#Row_clusters <- Row_clusters[ -c(3:4) ]
+
+
+
+
+
+
+
+
+#set color palette
+cazy_category_colour = list(
+  Phylum = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"),
+  Category = c("CAZy"="#CC79A7", "Methanogenesis and methanotrophy"="#003C30", "Nitrogen metabolism"="#7F0000", "Other Reductases"="black", "SCFA and alcohol conversions"="#6A51A3", "Sulfur metabolism"="#FDAE61"),
+  Watermass = c("Neritic" = "#0C0881", "STW" = "#7316A2", "Front" = "#BD5077", "SAW" = "#EA9953", "Deep" = "#F2F958"))
+
+pheatmap(bincazy_matrix,
+         color=c("red", "blue"),
+         annotation_colors = cazy_category_colour,
+         annotation_row = Row_clusters, 
+         annotation_col = cazy_categories_annotation,
+         labels_col = cazy_categories$CAZy_Function,
+         show_colnames=TRUE,
+         drop_levels = TRUE,
+         annotation_legend= TRUE,
+         annotation_names_row = TRUE,
+         fontsize = 10, 
+         fontsize_row = 6, 
+         fontsize_col = 6,
+         cellwidth = 9,
+         angle_col = 45,
+         cellheight = 5,
+         cutree_rows = 6)
+         
+```
+
+```{Figure S10}
+remove(product_combined)
+product_combined <- dplyr::bind_rows(product1, product2, product3, product4, product5, product6, product7, product8, product9)
+
+remove(mdata)
+
+#Row_clusters<-NMDS_metadata[ -c(2,5)]
+#Row_clusters<-distinct(Row_clusters,bin_ID,.keep_all= TRUE)
+#rownames(Row_clusters) <- Row_clusters$bin_ID
+#Row_clusters$Phylum<-as.character(Row_clusters$Phylum)
+#Row_clusters <- Row_clusters[ -c(1) ]
+
+mdata <- melt(All_bins, id=c("Bin_ID","Watermass", "Genus", "Phylum"))
+
+##combining for just by genome
+All_bins <- read.csv("~/base data/MOTS_bin_base_data.csv",fill = TRUE, header = TRUE, sep = ",")
+
+All_bins_taxa <- as.matrix(All_bins[13:19])
+
+All_bins_taxa <- tax_table(All_bins_taxa)
+
+
+All_bins_taxa <- All_bins_taxa %>%
+  tax_fix()
+
+All_bins_taxa <- data.frame(All_bins_taxa)
+
+All_bins <- All_bins %>%
+  .[-c(13:19)]
+
+All_bins_taxa$Bin_ID <- All_bins$Bin_ID
+
+All_bins <- merge(All_bins, All_bins_taxa, by = c("Bin_ID"))
+
+#All_bins <- column_to_rownames(All_bins, var = "Bin_ID")
+
+mdata <- melt(All_bins, id=c("Bin_ID","Watermass", "Phylum", "Genus"))
+
+
+
+##combining for just by genome
+product_combined_genus <- merge(product_combined, mdata, by.x = ("genome"), by.y = ("Bin_ID"))
+product_combined_genus <- subset(product_combined_genus, select = -c(genome, Watermass, Phylum, variable, value))
+
+product_combined_genus <- product_combined_genus %>%
+  select(Genus, everything())
+
+
+Row_clusters<-mdata[ -c(5:6)]
+Row_clusters<-distinct(Row_clusters,Genus,.keep_all= TRUE)
+rownames(Row_clusters) <- Row_clusters$Genus
+Row_clusters <- Row_clusters[ -c(1) ]
+#Row_clusters$Treatment<-as.character(Row_clusters$Treatment)
+
+Row_clusters <- Row_clusters[ -c(3)]
+
+
+#keep only bins being analysed
+library(conflicted)
+conflicts_prefer(rstatix::filter)
+product_combined<-filter(product_combined_genus, Genus %in% All_bins$Genus)
+
+
+
+
+#split into presence/absence vs pathway completeness results
+all_bin_pcompleteness <- product_combined[ -c(34:99) ]
+
+all_bin_cazy <- product_combined[ -c(2:33) ]
+
+#rename 'genome' to 'Bin_ID' for consistency
+conflicts_prefer(plyr::rename)
+all_bin_pcompleteness<-rename(all_bin_pcompleteness, c("Genus" = "Bin_ID" ))
+all_bin_cazy<-rename(all_bin_cazy, c("Genus" = "Bin_ID"  ))
+
+
+
+#remove duplicate rows/bins
+all_bin_pcompleteness<-unique(all_bin_pcompleteness, by = "Bin_ID")
+all_bin_cazy<-unique(all_bin_cazy, by = "Bin_ID")
+
+#replace True/False for 1/0
+all_bin_cazy[all_bin_cazy == "False"] <- "0"
+all_bin_cazy[all_bin_cazy == "True"] <- "1"
+
+#make functional data into matrix
+
+all_bin_pcompleteness <- aggregate(. ~ Bin_ID, data = all_bin_pcompleteness, FUN = mean)
+
+rownames(all_bin_pcompleteness) <- all_bin_pcompleteness$Bin_ID
+
+#identify and delete genes with no hits
+all_bin_pcompleteness<-all_bin_pcompleteness[, colSums(all_bin_pcompleteness != 0) > 0]
+pcompleteness_matrix <- as.matrix(all_bin_pcompleteness[,-1])
+
+rownames(pcompleteness_matrix) <- all_bin_pcompleteness[,1]
+
+
+completeness_matrix <- mapply(pcompleteness_matrix, FUN=as.numeric)
+completeness_matrix <- matrix(data=completeness_matrix, ncol=length(colnames(pcompleteness_matrix)), nrow=length(row.names(pcompleteness_matrix)))
+row.names(completeness_matrix) <- row.names(pcompleteness_matrix)
+colnames(completeness_matrix) <- colnames(pcompleteness_matrix)
+
+library(pheatmap)
+library(viridis)
+
+pheatmap(completeness_matrix)
+
+
+#import modified annotations
+functional_categories <- read.csv("~/base data/functional_catgories_rev.csv",fill = TRUE, header = TRUE, sep = ",")
+
+#subset by those detected
+func_list <- colnames(pcompleteness_matrix)
+functional_categories<-filter(functional_categories, Function %in% func_list)
+
+#Keep only two columns used for plots
+rownames(functional_categories) <- functional_categories$Function
+functional_categories <- functional_categories[ -c(1) ]
+functional_categories<-rename(functional_categories, c("Renamed_function" = "Function"))
+functional_categories_annotation <- functional_categories[ -c(2) ]
+
+
+
+#test heatmap
+pheatmap(completeness_matrix, annotation_row = Row_clusters, annotation_col = functional_categories,show_colnames=FALSE, labels_row = Row_clusters$Watermass)
+
+#func_category_colour = list(
+  #Phylum = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"), "Category" = c("Central C metabolism"="#000000", "ETC complex I"="#990F0F", "ETC complex II"="#99540F", "ETC complex III"="#6B990F", "ETC complex IV High affinity"="#0F6B99", "ETC complex IV Low affinity"="#260F99", "ETC complex V"="#CC79A7"))
+#set color palette
+
+func_category_colour = list(
+  Phylum = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"),
+  Watermass = c("NW" = "#0C0881", "STW" = "#7316A2", Front = "#BD5077", "SAW" = "#EA9953", "Deep" = "#F2F958"))
+
+library(viridis)
+library(pheatmap)
+
+
+write.csv(all_bin_cazy, "~/base data/all_bin_cazy.csv")
+
+all_bin_cazy <- read.csv("~/base data/all_bin_cazy.csv", header = TRUE)
+
+all_bin_cazy <- all_bin_cazy[-1]
+
+all_bin_cazy <- aggregate(. ~ Bin_ID, all_bin_cazy, sum)
+
+rownames(all_bin_cazy) <- all_bin_cazy$Bin_ID
+
+all_bin_cazy_list <- all_bin_cazy$Bin_ID
+
+#replace True/False for 1/0
+all_bin_cazy[all_bin_cazy > 0] <- "1"
+all_bin_cazy[all_bin_cazy == "0"] <- "0"
+
+
+
+all_bin_cazy <- all_bin_cazy[-1]
+all_bin_cazy$Bin_ID <- all_bin_cazy_list
+
+all_bin_cazy = all_bin_cazy %>% dplyr::select("Bin_ID",  
+                                              everything())
+
+rownames(all_bin_cazy) <- all_bin_cazy$Bin_ID
+
+#identify and delete genes with no hits
+all_bin_cazy<-all_bin_cazy[, colSums(all_bin_cazy != 0) > 0]
+cazy_matrix <- as.matrix(all_bin_cazy[,-1])
+
+rownames(cazy_matrix) <- all_bin_cazy[,1]
+
+
+bincazy_matrix <- mapply(cazy_matrix, FUN=as.numeric)
+bincazy_matrix <- matrix(data=bincazy_matrix, ncol=length(colnames(cazy_matrix)), nrow=length(row.names(cazy_matrix)))
+row.names(bincazy_matrix) <- row.names(cazy_matrix)
+colnames(bincazy_matrix) <- colnames(cazy_matrix)
+
+pheatmap(bincazy_matrix)
+
+#create a document with functional annotations
+cazy_categories<-as.data.frame(t(cazy_matrix))
+cazy_categories <- tibble::rownames_to_column(cazy_categories, "Cazy_Function") # Apply rownames_to_column
+#save as csv and modify file to create category annotations
+write.csv(cazy_categories, "~/base data/cazy_categories.csv", row.names = T)
+
+
+
+#re-import modified annotations
+cazy_categories <- read.csv("~/base data/cazy_categories_rev.csv",fill = TRUE, header = TRUE, sep = ",")
+#cazy_categories <- cazy_categories[-1]
+#remove leading space
+cazy_categories$Renamed_function <- trimws(cazy_categories$Renamed_function, which = c("left"))
+
+#subset by those detected
+
+
+cazy_list <- colnames(all_bin_cazy)
+cazy_list <- cazy_list[-1]
+cazy_categories<-filter(cazy_categories, Cazy_Function %in% cazy_list)
+
+#Keep only two columns used for plots
+rownames(cazy_categories) <- cazy_categories$Cazy_Function
+cazy_categories <- cazy_categories[ -c(1) ]
+cazy_categories<-rename(cazy_categories, c("Renamed_function" = "CAZy_Function"))
+cazy_categories_annotation <- cazy_categories[ -c(2) ]
+
+
+
+
+
+#test heatmap
+pheatmap(bincazy_matrix,
+         annotation_col = cazy_categories,
+         show_colnames=FALSE, 
+         labels_row = Row_clusters$Genus)
+
+
+#set color palette
+cazy_category_colour = list(
+  Phylum = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"),
+  Watermass = c("NW" = "#0C0881", "STW" = "#7316A2", Front = "#BD5077", "SAW" = "#EA9953", "Deep" = "#F2F958"),
+  Category = c("CAZy"="#CC79A7", "Methanogenesis and methanotrophy"="#003C30", "Nitrogen metabolism"="#7F0000", "Photosynthesis"="#C2DD9B", "Other Reductases"="black", "SCFA and alcohol conversions"="#6A51A3", "Sulfur metabolism"="#FDAE61"))
+
+pheatmap(bincazy_matrix,
+         color=c("red", "blue"),
+         annotation_colors = cazy_category_colour,
+         annotation_row = Row_clusters, 
+         annotation_col = cazy_categories_annotation,
+         labels_col = cazy_categories$CAZy_Function,
+         show_colnames=TRUE,
+         drop_levels = TRUE,
+         annotation_legend= TRUE,
+         annotation_names_row = TRUE,
+         fontsize = 10, 
+         fontsize_row = 6, 
+         fontsize_col = 6,
+         cellwidth = 9,
+         angle_col = 45,
+         cellheight = 5,
+         cutree_rows = 6)
+         
+```
+
+```{Figure S11}
+###NMDS1 by Bin Size
+
+for_bin_size <- read.csv("~/base data/for_bin_size_bin_metadata.csv")
+
+t_metabolism_summary <- t(metabolism_summary)
+
+com = metabolism_summary[,7:ncol(metabolism_summary)]
+
+com <- t(com)
+m_com <- as.matrix(com)
+
+
+tot <- rowSums(m_com)
+m_com <- m_com[tot > 0, ]
+
+m_com <- na.omit(m_com)
+
+set.seed(123)
+nmds = metaMDS(m_com, distance = "bray")
+nmds
+
+data.scores = as.data.frame(scores(nmds)$sites)
+
+data.scores$bin_ID <- row.names(data.scores)
+
+#add columns to data frame 
+NMDS_metadata <- read.csv("~/base data/for_NMDS_metadata.csv")
+
+with_season_meta <- read_excel("~/base data/Nova_metadata_season.xlsx")
+
+with_season_meta <- merge(x=NMDS_metadata, y=with_season_metadata, by.x='Sample', by.y='Sample')
+with_season_meta <- subset(with_season_meta, select = -c(Phylum))
+
+mots.taxa.csv$bin_ID <- rownames(mots.taxa.csv)
+
+mots_taxa <- mots.taxa.csv
+mots_taxa <- subset(mots_taxa, select = c(bin_ID, Phylum))
+
+with_season_meta <- merge(x=with_season_meta, y = mots_taxa, by = "bin_ID")
+
+
+
+with_season_meta <- subset(with_season_meta, select = c(bin_ID, Phylum, Watermass, Sample, Season, cluster, Year))
+
+data.scores <- merge(x=with_season_meta, y=data.scores, by.x='bin_ID', by.y='bin_ID')
+
+
+#nmds_bin_size <- cbind(for_bin_size, data.scores_clust)
+#for_bin_size %>%
+#join(data.scores_clust, by = c("Bin_ID", "bin_ID"))
+
+nmds_bin_size <- merge(x=for_bin_size, y=data.scores, by.x='Bin_ID', by.y='bin_ID')
+
+abundance <- psmelt(mots.phylo)
+
+abundance_for_bin_size <- subset(abundance, select = -c(Abundance, Sample_ID_2, MOTS_ID,Year,Month,M.Y,sampDate,Season,Published_station,Species, Species_ANI,mOTU,X16S))
+
+data.scores_for_bin_size <- subset(data.scores, select = c(bin_ID, NMDS1, NMDS2))
+
+for_bin_size <- merge(x = data.scores_for_bin_size, y = abundance_for_bin_size, by.x = "bin_ID", by.y = "OTU", all.y = FALSE, no.dups = TRUE)
+
+for_bin_size <- for_bin_size[!duplicated(for_bin_size$bin_ID), ]
+
+for_bin_size$Bin_Size..Mbp. <- as.numeric(for_bin_size$Bin_Size..Mbp.)
+for_bin_size$Completeness.... <- as.numeric(for_bin_size$Completeness....)
+for_bin_size$Community.... <- as.numeric(for_bin_size$Community....)
+for_bin_size$Lon..oE. <- as.numeric(for_bin_size$Lon..oE.)
+for_bin_size$Lat..oN. <- as.numeric(for_bin_size$Lat..oN.)
+for_bin_size$Distance..km.from.TH. <- as.numeric(for_bin_size$Distance..km.from.TH.)
+for_bin_size$Temp..oC. <- as.numeric(for_bin_size$Temp..oC.)
+for_bin_size$Salinity..psu. <- as.numeric(for_bin_size$Salinity..psu.)
+for_bin_size$Phosphate..mol.m.3. <- as.numeric(for_bin_size$Phosphate..mol.m.3.)
+for_bin_size$Nitrate..mol.m.3. <- as.numeric(for_bin_size$Nitrate..mol.m.3.)
+for_bin_size$Silicate..mol.m.3. <- as.numeric(for_bin_size$Silicate..mol.m.3.)
+for_bin_size$chlA..mg.m3. <- as.numeric(for_bin_size$chlA..mg.m3.)
+###Bin size ORF regression
+library(ggpmisc)
+
+bin_size_ORF_regression <- ggplot(nmds_bin_size, aes(x = ORF_count, y = Bin_Size.Mbp.)) +
+  geom_point() +
+  labs(x = "ORF count", y = "Bin size (Mbp)", tag = "B") +
+  stat_poly_line() +
+  stat_poly_eq() +
+  My_Theme
+
+bin_size_ORF_regression
+```
+
+```{Figure S12}
+
+t_metabolism_summary <- t(metabolism_summary)
+
+com = metabolism_summary[,7:ncol(metabolism_summary)]
+
+com <- t(com)
+m_com <- as.matrix(com)
+
+
+tot <- rowSums(m_com)
+m_com <- m_com[tot > 0, ]
+
+m_com <- na.omit(m_com)
+
+set.seed(123)
+nmds = metaMDS(m_com, distance = "bray")
+nmds
+
+data.scores = as.data.frame(scores(nmds)$sites)
+
+data.scores$bin_ID <- row.names(data.scores)
+
+#add columns to data frame 
+NMDS_metadata <- read.csv("~/base data/for_NMDS_metadata.csv")
+
+with_season_meta <- read_excel("~/base data/Nova_metadata_season.xlsx")
+
+with_season_meta <- merge(x=NMDS_metadata, y=with_season_metadata, by.x='Sample', by.y='Sample')
+with_season_meta <- subset(with_season_meta, select = -c(Phylum))
+
+mots.taxa.csv$bin_ID <- rownames(mots.taxa.csv)
+
+mots_taxa <- mots.taxa.csv
+mots_taxa <- subset(mots_taxa, select = c(bin_ID, Phylum))
+
+with_season_meta <- merge(x=with_season_meta, y = mots_taxa, by = "bin_ID")
+
+
+
+with_season_meta <- subset(with_season_meta, select = c(bin_ID, Phylum, Watermass, Sample, Season, cluster, Year))
+
+data.scores <- merge(x=with_season_meta, y=data.scores, by.x='bin_ID', by.y='bin_ID')
+
+#data.scores <- cbind(with_season_meta, data.scores)
+
+head(data.scores)
+
+#data.scores <- subset(data.scores, select = c(bin_ID, Watermass.y, Phylum.y, Season, cluster.x, NMDS1, NMDS2))
+
+rownames(data.scores ) <- NULL
+
+#data.scores_clust <- read.csv("/Volumes/micro-shared$/MoralesLab/Projects/MOTS/MOTS_MAGs/read_recruitment_to_bins/Yugen_working_files/data.scores_clust.csv")
+
+NMDS_watermass <- ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(color = factor(Watermass, level=c('Neritic','STW','Front','SAW','Deep')))) + 
+  labs(x = "NMDS1", colour = "Time", y = "NMDS2", shape = "Type", tags = "A")  + 
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(colour = "black", size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 24),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 14),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=22, face="bold"),
+        strip.text.y = element_text(size=22, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank())
+
+NMDS_year <- ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(color = factor(Year, level=c('2014','2015','2016','2017', '2018')))) + 
+  labs(x = "NMDS1", colour = "Time", y = "NMDS2", shape = "Type", tags = "C")  + 
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(colour = "black", size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 24),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 14),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=22, face="bold"),
+        strip.text.y = element_text(size=22, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank())
+
+NMDS_season <- ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(color = factor(Season, level=c('Autumn','Winter','Spring','Summer')))) + 
+  labs(x = "NMDS1", colour = "Time", y = "NMDS2", shape = "Type" , tags = "B")  + 
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(colour = "black", size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 24),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 14),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=22, face="bold"),
+        strip.text.y = element_text(size=22, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank())
+
+
+
+#view
+NMDS_watermass
+
+#view
+NMDS_year
+
+#view
+NMDS_season
+
+
+
+grid.arrange(NMDS_watermass, NMDS_season, NMDS_year,
+             ncol = 2)
+
+```
+
+
+```{r Figure S13}
+
+
+ord <- ordinate(mots.phylo, "NMDS", "bray")
+p1 = plot_ordination(mots.phylo, ord, type="taxa", color="Phylum")
+p1 <- p1 +
+  geom_point(size = 3) +
+  My_Theme +
+  scale_color_manual(values = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#C3B4D1", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey"))
+
+p1
+
+p1$data$NMDS1
+p1$d
+
+p2 = plot_ordination(mots.phylo, ord, type="sample", color="Watermass")
+p2 <- p2 +
+  geom_point(size = 3) +
+  My_Theme #+
+  scale_color_manual(values = c("Neritic" = "#0C0881", "STW" = "#7316A2", "Front" = "#BD5077", "SAW" = "#EA9953", "Deep" = "#F2F958"))
+
+p2
+
+nmds_taxa <- as.data.frame(p1$data)
+
+ggplot(nmds_taxa, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(color = Phylum)) +
+  scale_color_manual(values = c("Chloroflexota" = "#C2DD9B", "Cyanobacteria" = "#669C4C", "Dadabacteria" = "#B4CCDF", "Fibrobacterota" = "#4A75AA", "Gemmatimonadota" = "#E3A29D", "Marinisomatota" = "#C04335", "Myxococcota" = "#ECC485", "Nitrospinota" = "#E18B46", "Planctomycetota" = "#4B9B7A", "Proteobacteria" = "#5F4190", "SAR324" = "#FFFFB0", "Verrucomicrobiota" = "#9C623C", "Acidobacteriota" = "#666666", "Actinobacteriota" = "#D43F88", "Bacteroidota" = "#7470AF", "Binatota" = "#CA6728", "Crenarchaeota" = "#C3B4D1", "Thermoplasmatota" = "lightgrey")) +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(colour = "black", size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 24),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 12),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=22, face="bold"),
+        strip.text.y = element_text(size=22, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) +
+  labs(x = "NMDS1", colour = "Phylum.y", y = "NMDS2", shape = "Type")
+
+###16S Phyloseq object
+Munida_OG
+
+###FROM MERGE_SAMPLES
+Munida_OG
+
+
+
+MOG = Munida_OG
+MOG = prune_taxa(taxa_sums(Munida_OG) > 0, Munida_OG)
+
+S16S_MAGS_Sample_data <- read.csv("~/base data/16S_MAGS_Sample_Names.csv")
+
+MAGS = S16S_MAGS_Sample_data$X16S_Samples
+MAGS <- data.frame(MAGS)
+
+sample_data(MOG)$MAGsamples <- get_variable(MOG, "SampleID") %in% MAGS
+
+mergedMOG = merge_samples(MOG, "SampleID")
+SD = merge_samples(sample_data(MOG), "SampleID")
+print(SD[, "SampleID"])
+
+S16_Matrix_merged <- distance(mergedMOG, method = "bray")
+
+S16_Matrix_merged <- as.matrix(S16_Matrix_merged)
+
+#S16_Matrix_merged$name <- row.names(S16_Matrix_merged)
+
+
+
+##My ownn stuff
+
+Munida_melted <- psmelt(Munida_OG)
+
+Munida_melted <- subset(Munida_melted, select = c(Abundance, Phylum, SampleID, Water_mass_PCA, Season))
+
+library(data.table)
+setDT(Munida_melted)
+Munida_melted1  = Munida_melted [ , .(counted = sum(Abundance)), by = .(Phylum, SampleID, Water_mass_PCA, Season)]
+
+Munida_16S_matrix <- distance(Munida_OG, method = "bray", type = "Sample")
+Munida_16S_matrix <- as.matrix(Munida_16S_matrix)
+
+mots.phylo_matrix <- distance(mots.phylo, method = "bray", type = "Sample")
+mots.phylo_matrix <- as.matrix(mots.phylo_matrix)
+mots.phylo_matrix <- read.csv("~/Downloads/mots_phylo_matrix.csv", check.names=FALSE)
+rownames(mots.phylo_matrix) <- mots.phylo_matrix$X
+mots.phylo_matrix$X <- NULL
+
+T.fm <- format(mots.phylo_matrix)
+T.fm[row(T.fm) < col(T.fm)] <- ""
+print(T.fm, quote=F)
+
+T.ffm <- format(Munida_16S_matrix)
+T.ffm[row(T.ffm) < col(T.ffm)] <- ""
+print(T.fm, quote=F)
+
+
+
+T.fm <- mots.phylo_matrix[order(row.names(x = mots.phylo_matrix)), order(colnames(x = mots.phylo_matrix))]
+T.ffm <- Munida_16S_matrix[order(row.names(x = Munida_16S_matrix)), order(colnames(x = Munida_16S_matrix))]
+
+# Remove rows/column 16S
+T.ffm <- data.frame(T.ffm, check.names = FALSE)
+T.ffm <- T.ffm[ , c("1A0315500", "1A0415", "1A0714", "1A1214", "1B0315", "1B0614", "1B0614500", "6A0315", "6A0415", "6B0714", "7B0614", "MunidaAug2015ST1a0m", "MunidaAug2015ST1a500m", "MunidaAug2015ST2a", "MunidaAug2015ST3a", "MunidaAug2015ST4a", "MunidaAug2015ST5a", "MunidaAug2015ST6a", "MunidaAug2015ST7a", "MunidaAug2015ST8b", "MunidaAug2016ST3a", "MunidaAug2016ST5a", "MunidaAug2016ST8b0m", "MunidaAug2016ST8b500m", "MunidaDec2015ST1a0m", "MunidaDec2015ST1a500m", "MunidaDec2015ST2a", "MunidaDec2015ST3a", "MunidaDec2015ST4a", "MunidaDec2015ST5a", "MunidaDec2015ST6a", "MunidaDec2015ST7a", "MunidaFeb2017ST2a", "MunidaFeb2017ST3a", "MunidaFeb2017ST8a0m", "MunidaFeb2017ST8a500m", "MunidaFeb22017ST4a", "MunidaFeb22017ST6a", "MunidaFeb22017ST8a0m", "MunidaFeb22017ST8b500m", "MunidaJan2016ST1a0m", "MunidaJan2016ST1a500m", "MunidaJan2016ST7b","MunidaMar2016ST1a0m", "MunidaMar2016ST1a500m", "MunidaMar2016ST2b", "MunidaMar2016ST3a", "MunidaMar2016ST4a", "MunidaMar2016ST5a", "MunidaMar2016ST6b", "MunidaMar2016ST7a", "MunidaMar2016ST8a", "MunidaMar2017ST2a", "MunidaMar2017ST3a", "MunidaMar2017ST8a0m", "MunidaNov2015ST1a0m", "MunidaNov2015ST1a500m", "MunidaNov2015ST7a") ]
+
+# getting rows  
+rows <- c("1A0315500", "1A0415", "1A0714", "1A1214", "1B0315", "1B0614", "1B0614500", "6A0315", "6A0415", "6B0714", "7B0614", "MunidaAug2015ST1a0m", "MunidaAug2015ST1a500m", "MunidaAug2015ST2a", "MunidaAug2015ST3a", "MunidaAug2015ST4a", "MunidaAug2015ST5a", "MunidaAug2015ST6a", "MunidaAug2015ST7a", "MunidaAug2015ST8b", "MunidaAug2016ST3a", "MunidaAug2016ST5a", "MunidaAug2016ST8b0m", "MunidaAug2016ST8b500m", "MunidaDec2015ST1a0m", "MunidaDec2015ST1a500m", "MunidaDec2015ST2a", "MunidaDec2015ST3a", "MunidaDec2015ST4a", "MunidaDec2015ST5a", "MunidaDec2015ST6a", "MunidaDec2015ST7a", "MunidaFeb2017ST2a", "MunidaFeb2017ST3a", "MunidaFeb2017ST8a0m", "MunidaFeb2017ST8a500m", "MunidaFeb22017ST4a", "MunidaFeb22017ST6a", "MunidaFeb22017ST8a0m", "MunidaFeb22017ST8b500m", "MunidaJan2016ST1a0m", "MunidaJan2016ST1a500m", "MunidaJan2016ST7b","MunidaMar2016ST1a0m", "MunidaMar2016ST1a500m", "MunidaMar2016ST2b", "MunidaMar2016ST3a", "MunidaMar2016ST4a", "MunidaMar2016ST5a", "MunidaMar2016ST6b", "MunidaMar2016ST7a", "MunidaMar2016ST8a", "MunidaMar2017ST2a", "MunidaMar2017ST3a", "MunidaMar2017ST8a0m", "MunidaNov2015ST1a0m", "MunidaNov2015ST1a500m", "MunidaNov2015ST7a") 
+
+# extracting data frame rows 
+T.ffm <- T.ffm [rownames(T.ffm) %in% rows, ] 
+
+
+# Remove rows/column MAGS
+
+T.fm <- data.frame(T.fm, check.names = FALSE)
+T.fm <- T.fm[ , c("1A_03/15_500", "1A_04/15_0", "1A_07/14_0", "1A_12/14_0", "1B_03/15_0", "1B_06/14_0", "1B_06/14_500", "6A_03/15_0", "6A_04/15_0", "6B_07/14_0", "7B_06/14_0", "Munida_Aug2015_ST1a_0m", "Munida_Aug2015_ST1a_500m", "Munida_Aug2015_ST2a", "Munida_Aug2015_ST3a", "Munida_Aug2015_ST4a", "Munida_Aug2015_ST5a", "Munida_Aug2015_ST6a", "Munida_Aug2015_ST7a", "Munida_Aug2015_ST8b", "Munida_Aug2016_ST3a", "Munida_Aug2016_ST5", "Munida_Aug2016_ST8a_0m", "Munida_Aug2016_ST8b_500m", "Munida_Dec2015_ST1a_0m", "Munida_Dec2015_ST1a_500m", "Munida_Dec2015_ST2a", "Munida_Dec2015_ST3a", "Munida_Dec2015_ST4a", "Munida_Dec2015_ST5a", "Munida_Dec2015_ST6a", "Munida_Dec2015_ST7a", "Munida_Feb2017_ST2a", "Munida_Feb2017_ST3", "Munida_Feb2017_ST8a_0m", "Munida_Feb2017_ST8a_500m", "Munida_Feb22017_ST4a", "Munida_Feb22017_ST6", "Munida_Feb22017_ST8a_0m", "Munida_Feb22017_ST8b_500m", "Munida_Jan2016_ST1a_0m", "Munida_Jan2016_ST1a_500m", "Munida_Jan2016_ST7b", "Munida_Mar2016_ST1a_0m", "Munida_Mar2016_ST1a_500m", "Munida_Mar2016_ST2b", "Munida_Mar2016_ST3a", "Munida_Mar2016_ST4a", "Munida_Mar2016_ST5a", "Munida_Mar2016_ST6b", "Munida_Mar2016_ST7a", "Munida_Mar2016_ST8a", "Munida_Mar2017_ST2a", "Munida_Mar2017_ST3", "Munida_Mar2017_ST8a_0m", "Munida_Nov2015_ST1a_0m", "Munida_Nov2015_ST1a_500m", "Munida_Nov2015_ST7a") ]
+
+
+rows <- c("1A_03/15_500", "1A_04/15_0", "1A_07/14_0", "1A_12/14_0", "1B_03/15_0", "1B_06/14_0", "1B_06/14_500", "6A_03/15_0", "6A_04/15_0", "6B_07/14_0", "7B_06/14_0", "Munida_Aug2015_ST1a_0m", "Munida_Aug2015_ST1a_500m", "Munida_Aug2015_ST2a", "Munida_Aug2015_ST3a", "Munida_Aug2015_ST4a", "Munida_Aug2015_ST5a", "Munida_Aug2015_ST6a", "Munida_Aug2015_ST7a", "Munida_Aug2015_ST8b", "Munida_Aug2016_ST3a", "Munida_Aug2016_ST5", "Munida_Aug2016_ST8a_0m", "Munida_Aug2016_ST8b_500m", "Munida_Dec2015_ST1a_0m", "Munida_Dec2015_ST1a_500m", "Munida_Dec2015_ST2a", "Munida_Dec2015_ST3a", "Munida_Dec2015_ST4a", "Munida_Dec2015_ST5a", "Munida_Dec2015_ST6a", "Munida_Dec2015_ST7a", "Munida_Feb2017_ST2a", "Munida_Feb2017_ST3", "Munida_Feb2017_ST8a_0m", "Munida_Feb2017_ST8a_500m", "Munida_Feb22017_ST4a", "Munida_Feb22017_ST6", "Munida_Feb22017_ST8a_0m", "Munida_Feb22017_ST8b_500m", "Munida_Jan2016_ST1a_0m", "Munida_Jan2016_ST1a_500m", "Munida_Jan2016_ST7b", "Munida_Mar2016_ST1a_0m", "Munida_Mar2016_ST1a_500m", "Munida_Mar2016_ST2b", "Munida_Mar2016_ST3a", "Munida_Mar2016_ST4a", "Munida_Mar2016_ST5a", "Munida_Mar2016_ST6b", "Munida_Mar2016_ST7a", "Munida_Mar2016_ST8a", "Munida_Mar2017_ST2a", "Munida_Mar2017_ST3", "Munida_Mar2017_ST8a_0m", "Munida_Nov2015_ST1a_0m", "Munida_Nov2015_ST1a_500m", "Munida_Nov2015_ST7a")
+T.fm <- T.fm [rownames(T.fm) %in% rows, ] 
+
+
+T.fm <- as.matrix(T.fm)
+T.ffm <- as.matrix(T.ffm)
+
+mantel(T.fm, T.ffm, method = "spearman", permutations = 9999, na.rm = TRUE)
+
+m_com <- T.ffm
+
+
+tot <- rowSums(m_com)
+m_com <- m_com[tot > 0, ]
+
+m_com <- na.omit(m_com)
+
+set.seed(123)
+nmds = metaMDS(m_com, distance = "bray")
+nmds
+
+data.scores_16S = as.data.frame(scores(nmds))
+
+data.scores_16S$SampleID <- row.names(data.scores_16S)
+
+S16_sample_data <- sample_data(Munida_OG)
+S16_sample_data <- data.frame(S16_sample_data)
+
+data.scores_16S <- merge(data.scores_16S, S16_sample_data, by = "SampleID")
+
+
+data.scores_16S$Water_mass_PCA<-factor(data.scores_16S$Water_mass_PCA,levels =c("NW", "STW", "FRONT", "SAW", "DEEP") )
+
+
+NMDS_16S <- ggplot(data.scores_16S, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(color = Water_mass_PCA)) +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(colour = "black", size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 24),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 12),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=22, face="bold"),
+        strip.text.y = element_text(size=22, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) +
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  theme(legend.position="none") +
+  labs(x = "16S NMDS1", colour = "Water_mass_PCA", y = "16S NMDS2", shape = "Type") +
+  xlim(-0.06, 0.06)
+
+NMDS_16S
+
+#MAG
+m_com <- T.fm
+
+
+tot <- rowSums(m_com)
+m_com <- m_com[tot > 0, ]
+
+m_com <- na.omit(m_com)
+
+set.seed(123)
+nmds = metaMDS(m_com, distance = "bray")
+nmds
+
+data.scores_MAG = as.data.frame(scores(nmds))
+
+data.scores_MAG$MOTS_ID <- row.names(data.scores_MAG)
+
+MAG_sample_data <- sample_data(mots.phylo)
+MAG_sample_data <- data.frame(MAG_sample_data)
+
+data.scores_MAG <- merge(data.scores_MAG, MAG_sample_data, by = "MOTS_ID")
+
+
+data.scores_MAG$Water_mass_PCA<-factor(data.scores_MAG$Water_mass_PCA,levels =c("NW", "STW", "FRONT", "SAW", "DEEP") )
+
+
+NMDS_MAG <- ggplot(data.scores_MAG, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(color = Watermass)) +
+  theme(axis.title.x = element_text(face="bold",size=24),
+        axis.text.x = element_text(colour = "black", size=22), 
+        axis.text.y = element_text(colour = "black", size=22),
+        axis.title.y = element_text(face="bold",size=24),
+        plot.title = element_text(size = 24),
+        legend.title =element_text(face="bold",size = 14),
+        legend.text = element_text(size = 12),
+        legend.key.size = unit(1, "cm"),
+        strip.text.x = element_text(size=22, face="bold"),
+        strip.text.y = element_text(size=22, face="bold"),
+        panel.border = element_rect(fill = NA, colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) +
+  scale_color_viridis(discrete=TRUE, option = "C") +
+  theme(legend.position="none") +
+  labs(x = "MAG NMDS1", colour = "Watermass", y = "MAG NMDS2", shape = "Type")
+
+NMDS_MAG
+
+
+grid.arrange(NMDS_16S, NMDS_MAG)
+
+
+#mantel
+
+
+###mantel
+df <- t(mots.otu.csv)
+
+temp <- mots.meta.df$`Temp (oC)`
+
+dist.abun <- vegdist(df, method = "bray")
+dist.temp <- dist(temp, method = "euclidean")
+
+abund_temp = mantel(dist.abun, dist.temp, method = "spearman", permutations = 9999, na.rm = TRUE)
+abund_temp
+
+
+```
+
+
