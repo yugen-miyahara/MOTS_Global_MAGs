@@ -1,0 +1,161 @@
+﻿module,Deep,SAW,STW
+2-Aminoethylphosphonate transport system,0,0,0
+ABC-2 type transport system,496,699,391
+Acetoin utilization transport system,0,0,0
+Adhesin protein transport system,14,34,14
+AI-2 transport system,0,0,0
+"alpha-1,4-Digalacturonate transport system",15,55,3
+alpha-Glucoside transport system,46,206,124
+alpha-Hemolysin/cyclolysin transport system,67,193,103
+Arabinosaccharide transport system,37,145,86
+Arginine transport system,0,0,0
+Arginine/lysine/histidine transport system,0,0,0
+Arginine/lysine/histidine/glutamine transport system,0,0,0
+Arginine/ornithine transport system,46,7,4
+Aspartate/glutamate/glutamine transport system,0,0,0
+"Bacitracin resistance, BceAB transporter",0,0,0
+"Bacitracin resistance, VraDE transporter",0,0,0
+Bacitracin transport system,0,0,0
+Bicarbonate transport system,0,0,0
+Biotin transport system,28,131,72
+Branched-chain amino acid transport system,1389,1508,921
+Capsular polysaccharide transport system,0,9,13
+Cationic peptide transport system,0,5,0
+Cell division transport system,101,266,174
+Cellobiose transport system,39,145,88
+Cobalamin salvage,36,49,16
+Cobalt/nickel transport system,14,3,9
+D-Allose transport system,0,0,0
+D-Methionine transport system,3,6,2
+D-Xylose transport system,1,57,23
+Dipeptide transport system,0,0,0
+"Dipeptide transport system, Firmicutes",0,0,0
+Energy-coupling factor transport system,52,180,87
+Erythritol transport system,0,1,0
+Fluoroquinolone transport system,0,0,0
+Fructose transport system,0,29,18
+gamma-Hexachlorocyclohexane transport system,163,544,224
+General L-amino acid transport system,209,382,184
+Glucose/arabinose transport system,0,0,0
+Glucose/mannose transport system,56,176,150
+Glutamate transport system,0,0,0
+Glutamate/aspartate transport system,0,0,0
+Glutamine transport system,0,1,1
+Glutathione transport system,0,0,0
+Glycerol transport system,9,86,108
+Glycine betaine/proline transport system,257,467,291
+Heme transport system,389,567,323
+Hemin transport system,0,0,0
+Hemophore/metalloprotease transport system,2,11,8
+Histidine transport system,0,0,0
+Hydroxyproline transporter system,16,25,0
+Inositol transport system,8,14,8
+Inositol-phosphate transport system,6,0,0
+Iron complex transport system,231,286,129
+Iron(III) transport system,262,502,210
+Iron/zinc/manganese/copper transport system,0,0,0
+L-Arabinose transport system,0,0,0
+L-Arabinose/lactose transport system,0,0,0
+L-Cystine transport system,0,0,0
+Lantibiotic transport system,0,0,0
+Lipooligosaccharide transport system,62,17,11
+Lipopolysaccharide export system,259,635,334
+Lipopolysaccharide transport system,69,34,28
+Lipoprotein-releasing system,173,470,207
+Lysine/arginine/ornithine transport system,0,0,0
+Maltose/maltodextrin transport system,52,190,106
+Manganese transport system,0,49,3
+Manganese/iron transport system,9,232,110
+Manganese/zinc transport system,0,0,0
+Manganese/zinc/iron transport system,96,275,104
+Mannopine transport system,0,0,0
+Mce transport system,161,542,224
+Methyl-galactoside transport system,0,0,0
+Microcin C transport system,166,319,130
+Molybdate transport system,274,331,189
+Molybdate/tungstate transport system,0,0,0
+Multidrug/hemolysin transport system,0,0,0
+Multiple protein transport system,0,0,0
+Multiple sugar transport system,0,0,0
+N-Acetylglucosamine transport system,0,0,0
+"N,N'-Diacetylchitobiose transport system",37,145,86
+Neutral amino acid transport system,0,0,0
+Nickel transport system,18,89,36
+NitT/TauT family transport system,205,317,193
+Octopine/nopaline transport system,1,17,3
+Oleandomycin transport system,0,0,0
+Oligogalacturonide transport system,0,0,0
+Oligopeptide transport system,116,270,97
+Osmoprotectant transport system,26,42,11
+Peptides/nickel transport system,1920,2640,1166
+Phosphate transport system,147,306,208
+Phospholipid transport system,236,730,310
+Phosphonate transport system,304,408,203
+Phthalate transport system,0,0,0
+"PTS system, 2-O-A-mannosyl-D-glycerate-specific II component",0,0,0
+"PTS system, alpha-glucoside-specific II component",0,0,0
+"PTS system, ascorbate-specific II component",0,0,2
+"PTS system, beta-glucoside (arbutin/salicin/cellobiose)-specific II component",0,0,0
+"PTS system, beta-glucoside-specific II component",1,0,1
+"PTS system, cellobiose-specific II component",0,0,0
+"PTS system, D-glucosaminate-specific II component",0,0,0
+"PTS system, D-glucosamine-specific II component",0,0,0
+"PTS system, fructose-specific II component",19,3,3
+"PTS system, fructose-specific II-like component",0,0,0
+"PTS system, fructoselysine/glucoselysine-specific II component",0,0,0
+"PTS system, galactitol-specific II component",0,0,3
+"PTS system, galactose-specific II component",0,0,0
+"PTS system, glucitol/sorbitol-specific II component",3,4,10
+"PTS system, glucose-specific II component",0,0,0
+"PTS system, lactose-specific II component",0,0,0
+"PTS system, maltose-specific II component",0,0,0
+"PTS system, maltose/glucose-specific II component",0,0,0
+"PTS system, mannitol-specific II component",1,1,1
+"PTS system, mannose-specific II component",2,55,33
+"PTS system, N-acetylgalactosamine-specific II component",0,0,0
+"PTS system, N-acetylglucosamine-specific II component",0,0,2
+"PTS system, N-acetylmuramic acid-specific II component",0,0,0
+"PTS system, sorbose-specific II component",0,0,0
+"PTS system, sucrose-specific II component",0,0,0
+"PTS system, trehalose-specific II component",0,0,0
+Putative ABC transport system,984,1416,663
+Putative aldouronate transport system,0,3,0
+Putative chitobiose transport system,2,91,7
+Putative fructooligosaccharide transport system,37,145,86
+Putative hydroxymethylpyrimidine transport system,40,48,10
+Putative lysine transport system,0,0,0
+Putative lysine/arginine/ornithine/histidine/octopine transport system,0,0,0
+Putative multiple sugar transport system,123,338,181
+Putative peptide transport system,0,0,0
+Putative polar amino acid transport system,410,505,302
+Putative S-methylcysteine transport system,0,0,0
+Putative simple sugar transport system,19,96,35
+Putative sn-glycerol-phosphate transport system,9,111,92
+Putative sorbitol/mannitol transport system,52,306,166
+Putative spermidine/putrescine transport system,147,335,160
+Putative thiamine transport system,9,29,0
+Putative xylitol transport system,0,0,0
+Putative zinc/manganese transport system,2,13,9
+Putrescine transport system,68,277,148
+Raffinose/stachyose/melibiose transport system,47,163,103
+Rhamnose transport system,12,35,38
+Ribose transport system,101,115,24
+RTX toxin transport system,67,188,103
+S-Layer protein transport system,0,0,0
+Sodium transport system,55,95,35
+Spermidine/putrescine transport system,215,165,77
+Sulfate/thiosulfate transport system,9,6,0
+Sulfonate transport system,26,20,32
+Taurine transport system,62,104,69
+Teichoic acid transport system,13,0,5
+"Tetracycline resistance, TetA transporter",59,129,64
+"Tetracycline resistance, TetAB(46) transporter",0,0,0
+Thiamine transport system,139,158,115
+Trehalose transport system,0,0,0
+Trehalose/maltose transport system,18,67,25
+Tungstate transport system,101,174,94
+Uncharacterized ABC transport system,0,0,0
+Urea transport system,154,124,71
+Vitamin B12 transport system,0,1,0
+Xylobiose transport system,0,0,0
+Zinc transport system,105,190,112

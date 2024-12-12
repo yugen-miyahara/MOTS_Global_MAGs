@@ -1,0 +1,33 @@
+Function,Category,Renamed_function
+3-Hydroxypropionate bi-cycle,Central C metabolism,3-Hydroxypropionate bi-cycle
+"Acetyl-CoA pathway, CO2 => acetyl-CoA",Central C metabolism,"Acetyl-CoA pathway, CO2 => acetyl-CoA"
+"Citrate cycle (TCA cycle, Krebs cycle)",Central C metabolism,"Citrate cycle (TCA cycle, Krebs cycle)"
+Dicarboxylate-hydroxybutyrate cycle,Central C metabolism,Dicarboxylate-hydroxybutyrate cycle
+"Entner-Doudoroff pathway, glucose-6P => glyceraldehyde-3P + pyruvate",Central C metabolism,"Entner-Doudoroff pathway, glucose-6P => glyceraldehyde-3P + pyruvate"
+"Glycolysis (Embden-Meyerhof pathway), glucose => pyruvate",Central C metabolism,"Glycolysis (Embden-Meyerhof pathway), glucose => pyruvate"
+Glyoxylate cycle,Central C metabolism,Glyoxylate cycle
+Hydroxypropionate-hydroxybutylate cycle,Central C metabolism,Hydroxypropionate-hydroxybutylate cycle
+"Methanogenesis, CO2 => methane",Central C metabolism,"Methanogenesis, CO2 => methane"
+Pentose phosphate pathway (Pentose phosphate cycle),Central C metabolism,Pentose phosphate pathway (Pentose phosphate cycle)
+Reductive acetyl-CoA pathway (Wood-Ljungdahl pathway),Central C metabolism,Reductive acetyl-CoA pathway (Wood-Ljungdahl pathway)
+Reductive citrate cycle (Arnon-Buchanan cycle),Central C metabolism,Reductive citrate cycle (Arnon-Buchanan cycle)
+Reductive pentose phosphate cycle (Calvin cycle),Central C metabolism,Reductive pentose phosphate cycle (Calvin cycle)
+"Complex I: NAD(P)H:quinone oxidoreductase, chloroplasts and cyanobacteria",ETC complex I,"NAD(P)H:quinone oxidoreductase, chloroplasts and cyanobacteria"
+Complex I: NADH dehydrogenase (ubiquinone) 1 alpha subcomplex,ETC complex I,NADH dehydrogenase (ubiquinone) 1 alpha subcomplex
+"Complex I: NADH:quinone oxidoreductase, prokaryotes",ETC complex I,"NADH:quinone oxidoreductase, prokaryotes"
+"Complex II: Fumarate reductase, prokaryotes",ETC complex II,"Fumarate reductase, prokaryotes"
+Complex II: Succinate dehydrogenase (ubiquinone),ETC complex II,Succinate dehydrogenase (ubiquinone)
+"Complex II: Succinate dehydrogenase, prokaryotes",ETC complex II,"Succinate dehydrogenase, prokaryotes"
+Complex III: Cytochrome bc1 complex,ETC complex III,Cytochrome bc1 complex
+Complex III: Cytochrome bc1 complex respiratory unit,ETC complex III,Cytochrome bc1 complex respiratory unit
+Complex III: Cytochrome bd ubiquinol oxidase,ETC complex III,Cytochrome bd ubiquinol oxidase
+Complex IV High affinity: Cytochrome bd ubiquinol oxidase,ETC complex IV High affinity,Cytochrome bd ubiquinol oxidase
+"Complex IV High affinity: Cytochrome c oxidase, cbb3-type",ETC complex IV High affinity,"Cytochrome c oxidase, cbb3-type"
+Complex IV Low affinity: Cytochrome aa3-600 menaquinol oxidase,ETC complex IV Low affinity,Cytochrome aa3-600 menaquinol oxidase
+Complex IV Low affinity: Cytochrome c oxidase,ETC complex IV Low affinity,Cytochrome c oxidase
+"Complex IV Low affinity: Cytochrome c oxidase, prokaryotes",ETC complex IV Low affinity,"Cytochrome c oxidase, prokaryotes"
+Complex IV Low affinity: Cytochrome o ubiquinol oxidase,ETC complex IV Low affinity,Cytochrome o ubiquinol oxidase
+"Complex V: F-type ATPase, eukaryotes",ETC complex V,"F-type ATPase, eukaryotes"
+"Complex V: F-type ATPase, prokaryotes and chloroplasts",ETC complex V,"F-type ATPase, prokaryotes and chloroplasts"
+"Complex V: V-type ATPase, eukaryotes",ETC complex V,"V-type ATPase, eukaryotes"
+"Complex V: V/A-type ATPase, prokaryotes",ETC complex V,"V/A-type ATPase, prokaryotes"
